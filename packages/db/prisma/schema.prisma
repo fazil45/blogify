@@ -19,5 +19,9 @@ model User {
   firstname String
   lastname  String?
   password  String
-  refreshToken  String
+  refreshToken  String?
+  isEmailVerified Boolean @default(false)
+  emailVerifyToken  String?
+  passwordResetToken  String?
+  passwordResetExpiry DateTime?
 }
