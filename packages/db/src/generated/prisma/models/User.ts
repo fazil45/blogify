@@ -34,8 +34,11 @@ export type UserMinAggregateOutputType = {
   refreshToken: string | null
   isEmailVerified: boolean | null
   emailVerifyToken: string | null
+  emailVerifyTokenExpiry: Date | null
   passwordResetToken: string | null
   passwordResetExpiry: Date | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -48,8 +51,11 @@ export type UserMaxAggregateOutputType = {
   refreshToken: string | null
   isEmailVerified: boolean | null
   emailVerifyToken: string | null
+  emailVerifyTokenExpiry: Date | null
   passwordResetToken: string | null
   passwordResetExpiry: Date | null
+  createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -62,8 +68,11 @@ export type UserCountAggregateOutputType = {
   refreshToken: number
   isEmailVerified: number
   emailVerifyToken: number
+  emailVerifyTokenExpiry: number
   passwordResetToken: number
   passwordResetExpiry: number
+  createdAt: number
+  updatedAt: number
   _all: number
 }
 
@@ -78,8 +87,11 @@ export type UserMinAggregateInputType = {
   refreshToken?: true
   isEmailVerified?: true
   emailVerifyToken?: true
+  emailVerifyTokenExpiry?: true
   passwordResetToken?: true
   passwordResetExpiry?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -92,8 +104,11 @@ export type UserMaxAggregateInputType = {
   refreshToken?: true
   isEmailVerified?: true
   emailVerifyToken?: true
+  emailVerifyTokenExpiry?: true
   passwordResetToken?: true
   passwordResetExpiry?: true
+  createdAt?: true
+  updatedAt?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -106,8 +121,11 @@ export type UserCountAggregateInputType = {
   refreshToken?: true
   isEmailVerified?: true
   emailVerifyToken?: true
+  emailVerifyTokenExpiry?: true
   passwordResetToken?: true
   passwordResetExpiry?: true
+  createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -193,8 +211,11 @@ export type UserGroupByOutputType = {
   refreshToken: string | null
   isEmailVerified: boolean
   emailVerifyToken: string | null
+  emailVerifyTokenExpiry: Date | null
   passwordResetToken: string | null
   passwordResetExpiry: Date | null
+  createdAt: Date
+  updatedAt: Date
   _count: UserCountAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
@@ -228,8 +249,11 @@ export type UserWhereInput = {
   refreshToken?: Prisma.StringNullableFilter<"User"> | string | null
   isEmailVerified?: Prisma.BoolFilter<"User"> | boolean
   emailVerifyToken?: Prisma.StringNullableFilter<"User"> | string | null
+  emailVerifyTokenExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   passwordResetToken?: Prisma.StringNullableFilter<"User"> | string | null
   passwordResetExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
 
 export type UserOrderByWithRelationInput = {
@@ -242,8 +266,11 @@ export type UserOrderByWithRelationInput = {
   refreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
   isEmailVerified?: Prisma.SortOrder
   emailVerifyToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerifyTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordResetToken?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordResetExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -259,8 +286,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   refreshToken?: Prisma.StringNullableFilter<"User"> | string | null
   isEmailVerified?: Prisma.BoolFilter<"User"> | boolean
   emailVerifyToken?: Prisma.StringNullableFilter<"User"> | string | null
+  emailVerifyTokenExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   passwordResetToken?: Prisma.StringNullableFilter<"User"> | string | null
   passwordResetExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }, "id" | "username" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -273,8 +303,11 @@ export type UserOrderByWithAggregationInput = {
   refreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
   isEmailVerified?: Prisma.SortOrder
   emailVerifyToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerifyTokenExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordResetToken?: Prisma.SortOrderInput | Prisma.SortOrder
   passwordResetExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
@@ -293,8 +326,11 @@ export type UserScalarWhereWithAggregatesInput = {
   refreshToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   isEmailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   emailVerifyToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  emailVerifyTokenExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   passwordResetToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   passwordResetExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
 
 export type UserCreateInput = {
@@ -307,8 +343,11 @@ export type UserCreateInput = {
   refreshToken?: string | null
   isEmailVerified?: boolean
   emailVerifyToken?: string | null
+  emailVerifyTokenExpiry?: Date | string | null
   passwordResetToken?: string | null
   passwordResetExpiry?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UserUncheckedCreateInput = {
@@ -321,8 +360,11 @@ export type UserUncheckedCreateInput = {
   refreshToken?: string | null
   isEmailVerified?: boolean
   emailVerifyToken?: string | null
+  emailVerifyTokenExpiry?: Date | string | null
   passwordResetToken?: string | null
   passwordResetExpiry?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UserUpdateInput = {
@@ -335,8 +377,11 @@ export type UserUpdateInput = {
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emailVerifyToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifyTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordResetExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserUncheckedUpdateInput = {
@@ -349,8 +394,11 @@ export type UserUncheckedUpdateInput = {
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emailVerifyToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifyTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordResetExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserCreateManyInput = {
@@ -363,8 +411,11 @@ export type UserCreateManyInput = {
   refreshToken?: string | null
   isEmailVerified?: boolean
   emailVerifyToken?: string | null
+  emailVerifyTokenExpiry?: Date | string | null
   passwordResetToken?: string | null
   passwordResetExpiry?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type UserUpdateManyMutationInput = {
@@ -377,8 +428,11 @@ export type UserUpdateManyMutationInput = {
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emailVerifyToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifyTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordResetExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -391,8 +445,11 @@ export type UserUncheckedUpdateManyInput = {
   refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isEmailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   emailVerifyToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerifyTokenExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   passwordResetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   passwordResetExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -405,8 +462,11 @@ export type UserCountOrderByAggregateInput = {
   refreshToken?: Prisma.SortOrder
   isEmailVerified?: Prisma.SortOrder
   emailVerifyToken?: Prisma.SortOrder
+  emailVerifyTokenExpiry?: Prisma.SortOrder
   passwordResetToken?: Prisma.SortOrder
   passwordResetExpiry?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -419,8 +479,11 @@ export type UserMaxOrderByAggregateInput = {
   refreshToken?: Prisma.SortOrder
   isEmailVerified?: Prisma.SortOrder
   emailVerifyToken?: Prisma.SortOrder
+  emailVerifyTokenExpiry?: Prisma.SortOrder
   passwordResetToken?: Prisma.SortOrder
   passwordResetExpiry?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -433,8 +496,11 @@ export type UserMinOrderByAggregateInput = {
   refreshToken?: Prisma.SortOrder
   isEmailVerified?: Prisma.SortOrder
   emailVerifyToken?: Prisma.SortOrder
+  emailVerifyTokenExpiry?: Prisma.SortOrder
   passwordResetToken?: Prisma.SortOrder
   passwordResetExpiry?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -453,6 +519,10 @@ export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
 }
 
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
 
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -465,8 +535,11 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   refreshToken?: boolean
   isEmailVerified?: boolean
   emailVerifyToken?: boolean
+  emailVerifyTokenExpiry?: boolean
   passwordResetToken?: boolean
   passwordResetExpiry?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -479,8 +552,11 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   refreshToken?: boolean
   isEmailVerified?: boolean
   emailVerifyToken?: boolean
+  emailVerifyTokenExpiry?: boolean
   passwordResetToken?: boolean
   passwordResetExpiry?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -493,8 +569,11 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   refreshToken?: boolean
   isEmailVerified?: boolean
   emailVerifyToken?: boolean
+  emailVerifyTokenExpiry?: boolean
   passwordResetToken?: boolean
   passwordResetExpiry?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -507,11 +586,14 @@ export type UserSelectScalar = {
   refreshToken?: boolean
   isEmailVerified?: boolean
   emailVerifyToken?: boolean
+  emailVerifyTokenExpiry?: boolean
   passwordResetToken?: boolean
   passwordResetExpiry?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "email" | "firstname" | "lastname" | "password" | "refreshToken" | "isEmailVerified" | "emailVerifyToken" | "passwordResetToken" | "passwordResetExpiry", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "email" | "firstname" | "lastname" | "password" | "refreshToken" | "isEmailVerified" | "emailVerifyToken" | "emailVerifyTokenExpiry" | "passwordResetToken" | "passwordResetExpiry" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
@@ -526,8 +608,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     refreshToken: string | null
     isEmailVerified: boolean
     emailVerifyToken: string | null
+    emailVerifyTokenExpiry: Date | null
     passwordResetToken: string | null
     passwordResetExpiry: Date | null
+    createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -960,8 +1045,11 @@ export interface UserFieldRefs {
   readonly refreshToken: Prisma.FieldRef<"User", 'String'>
   readonly isEmailVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly emailVerifyToken: Prisma.FieldRef<"User", 'String'>
+  readonly emailVerifyTokenExpiry: Prisma.FieldRef<"User", 'DateTime'>
   readonly passwordResetToken: Prisma.FieldRef<"User", 'String'>
   readonly passwordResetExpiry: Prisma.FieldRef<"User", 'DateTime'>
+  readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }
     
 
