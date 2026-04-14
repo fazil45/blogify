@@ -34,8 +34,8 @@ model Blog {
   id        String @id @default(uuid())
   title     String
   content   String
-  creater   User   @relation(fields: [createrId], references: [id])
-  createrId String
+  creator   User   @relation(fields: [creatorId], references: [id])
+  creatorId String
   posted Boolean @default(false)
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt

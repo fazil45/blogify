@@ -28,7 +28,7 @@ export type BlogMinAggregateOutputType = {
   id: string | null
   title: string | null
   content: string | null
-  createrId: string | null
+  creatorId: string | null
   posted: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -39,7 +39,7 @@ export type BlogMaxAggregateOutputType = {
   id: string | null
   title: string | null
   content: string | null
-  createrId: string | null
+  creatorId: string | null
   posted: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -50,7 +50,7 @@ export type BlogCountAggregateOutputType = {
   id: number
   title: number
   content: number
-  createrId: number
+  creatorId: number
   posted: number
   createdAt: number
   updatedAt: number
@@ -63,7 +63,7 @@ export type BlogMinAggregateInputType = {
   id?: true
   title?: true
   content?: true
-  createrId?: true
+  creatorId?: true
   posted?: true
   createdAt?: true
   updatedAt?: true
@@ -74,7 +74,7 @@ export type BlogMaxAggregateInputType = {
   id?: true
   title?: true
   content?: true
-  createrId?: true
+  creatorId?: true
   posted?: true
   createdAt?: true
   updatedAt?: true
@@ -85,7 +85,7 @@ export type BlogCountAggregateInputType = {
   id?: true
   title?: true
   content?: true
-  createrId?: true
+  creatorId?: true
   posted?: true
   createdAt?: true
   updatedAt?: true
@@ -169,7 +169,7 @@ export type BlogGroupByOutputType = {
   id: string
   title: string
   content: string
-  createrId: string
+  creatorId: string
   posted: boolean
   createdAt: Date
   updatedAt: Date
@@ -201,24 +201,24 @@ export type BlogWhereInput = {
   id?: Prisma.StringFilter<"Blog"> | string
   title?: Prisma.StringFilter<"Blog"> | string
   content?: Prisma.StringFilter<"Blog"> | string
-  createrId?: Prisma.StringFilter<"Blog"> | string
+  creatorId?: Prisma.StringFilter<"Blog"> | string
   posted?: Prisma.BoolFilter<"Blog"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Blog"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Blog"> | Date | string
   image?: Prisma.StringNullableFilter<"Blog"> | string | null
-  creater?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type BlogOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
-  createrId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   posted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
-  creater?: Prisma.UserOrderByWithRelationInput
+  creator?: Prisma.UserOrderByWithRelationInput
 }
 
 export type BlogWhereUniqueInput = Prisma.AtLeast<{
@@ -228,19 +228,19 @@ export type BlogWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.BlogWhereInput | Prisma.BlogWhereInput[]
   title?: Prisma.StringFilter<"Blog"> | string
   content?: Prisma.StringFilter<"Blog"> | string
-  createrId?: Prisma.StringFilter<"Blog"> | string
+  creatorId?: Prisma.StringFilter<"Blog"> | string
   posted?: Prisma.BoolFilter<"Blog"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Blog"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Blog"> | Date | string
   image?: Prisma.StringNullableFilter<"Blog"> | string | null
-  creater?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
 export type BlogOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
-  createrId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   posted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -257,7 +257,7 @@ export type BlogScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Blog"> | string
   title?: Prisma.StringWithAggregatesFilter<"Blog"> | string
   content?: Prisma.StringWithAggregatesFilter<"Blog"> | string
-  createrId?: Prisma.StringWithAggregatesFilter<"Blog"> | string
+  creatorId?: Prisma.StringWithAggregatesFilter<"Blog"> | string
   posted?: Prisma.BoolWithAggregatesFilter<"Blog"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Blog"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Blog"> | Date | string
@@ -272,14 +272,14 @@ export type BlogCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   image?: string | null
-  creater: Prisma.UserCreateNestedOneWithoutBlogInput
+  creator: Prisma.UserCreateNestedOneWithoutBlogInput
 }
 
 export type BlogUncheckedCreateInput = {
   id?: string
   title: string
   content: string
-  createrId: string
+  creatorId: string
   posted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -294,14 +294,14 @@ export type BlogUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  creater?: Prisma.UserUpdateOneRequiredWithoutBlogNestedInput
+  creator?: Prisma.UserUpdateOneRequiredWithoutBlogNestedInput
 }
 
 export type BlogUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  createrId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   posted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -312,7 +312,7 @@ export type BlogCreateManyInput = {
   id?: string
   title: string
   content: string
-  createrId: string
+  creatorId: string
   posted?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -333,7 +333,7 @@ export type BlogUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
-  createrId?: Prisma.StringFieldUpdateOperationsInput | string
+  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
   posted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -354,7 +354,7 @@ export type BlogCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
-  createrId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   posted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -365,7 +365,7 @@ export type BlogMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
-  createrId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   posted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -376,56 +376,56 @@ export type BlogMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   content?: Prisma.SortOrder
-  createrId?: Prisma.SortOrder
+  creatorId?: Prisma.SortOrder
   posted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   image?: Prisma.SortOrder
 }
 
-export type BlogCreateNestedManyWithoutCreaterInput = {
-  create?: Prisma.XOR<Prisma.BlogCreateWithoutCreaterInput, Prisma.BlogUncheckedCreateWithoutCreaterInput> | Prisma.BlogCreateWithoutCreaterInput[] | Prisma.BlogUncheckedCreateWithoutCreaterInput[]
-  connectOrCreate?: Prisma.BlogCreateOrConnectWithoutCreaterInput | Prisma.BlogCreateOrConnectWithoutCreaterInput[]
-  createMany?: Prisma.BlogCreateManyCreaterInputEnvelope
+export type BlogCreateNestedManyWithoutCreatorInput = {
+  create?: Prisma.XOR<Prisma.BlogCreateWithoutCreatorInput, Prisma.BlogUncheckedCreateWithoutCreatorInput> | Prisma.BlogCreateWithoutCreatorInput[] | Prisma.BlogUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.BlogCreateOrConnectWithoutCreatorInput | Prisma.BlogCreateOrConnectWithoutCreatorInput[]
+  createMany?: Prisma.BlogCreateManyCreatorInputEnvelope
   connect?: Prisma.BlogWhereUniqueInput | Prisma.BlogWhereUniqueInput[]
 }
 
-export type BlogUncheckedCreateNestedManyWithoutCreaterInput = {
-  create?: Prisma.XOR<Prisma.BlogCreateWithoutCreaterInput, Prisma.BlogUncheckedCreateWithoutCreaterInput> | Prisma.BlogCreateWithoutCreaterInput[] | Prisma.BlogUncheckedCreateWithoutCreaterInput[]
-  connectOrCreate?: Prisma.BlogCreateOrConnectWithoutCreaterInput | Prisma.BlogCreateOrConnectWithoutCreaterInput[]
-  createMany?: Prisma.BlogCreateManyCreaterInputEnvelope
+export type BlogUncheckedCreateNestedManyWithoutCreatorInput = {
+  create?: Prisma.XOR<Prisma.BlogCreateWithoutCreatorInput, Prisma.BlogUncheckedCreateWithoutCreatorInput> | Prisma.BlogCreateWithoutCreatorInput[] | Prisma.BlogUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.BlogCreateOrConnectWithoutCreatorInput | Prisma.BlogCreateOrConnectWithoutCreatorInput[]
+  createMany?: Prisma.BlogCreateManyCreatorInputEnvelope
   connect?: Prisma.BlogWhereUniqueInput | Prisma.BlogWhereUniqueInput[]
 }
 
-export type BlogUpdateManyWithoutCreaterNestedInput = {
-  create?: Prisma.XOR<Prisma.BlogCreateWithoutCreaterInput, Prisma.BlogUncheckedCreateWithoutCreaterInput> | Prisma.BlogCreateWithoutCreaterInput[] | Prisma.BlogUncheckedCreateWithoutCreaterInput[]
-  connectOrCreate?: Prisma.BlogCreateOrConnectWithoutCreaterInput | Prisma.BlogCreateOrConnectWithoutCreaterInput[]
-  upsert?: Prisma.BlogUpsertWithWhereUniqueWithoutCreaterInput | Prisma.BlogUpsertWithWhereUniqueWithoutCreaterInput[]
-  createMany?: Prisma.BlogCreateManyCreaterInputEnvelope
+export type BlogUpdateManyWithoutCreatorNestedInput = {
+  create?: Prisma.XOR<Prisma.BlogCreateWithoutCreatorInput, Prisma.BlogUncheckedCreateWithoutCreatorInput> | Prisma.BlogCreateWithoutCreatorInput[] | Prisma.BlogUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.BlogCreateOrConnectWithoutCreatorInput | Prisma.BlogCreateOrConnectWithoutCreatorInput[]
+  upsert?: Prisma.BlogUpsertWithWhereUniqueWithoutCreatorInput | Prisma.BlogUpsertWithWhereUniqueWithoutCreatorInput[]
+  createMany?: Prisma.BlogCreateManyCreatorInputEnvelope
   set?: Prisma.BlogWhereUniqueInput | Prisma.BlogWhereUniqueInput[]
   disconnect?: Prisma.BlogWhereUniqueInput | Prisma.BlogWhereUniqueInput[]
   delete?: Prisma.BlogWhereUniqueInput | Prisma.BlogWhereUniqueInput[]
   connect?: Prisma.BlogWhereUniqueInput | Prisma.BlogWhereUniqueInput[]
-  update?: Prisma.BlogUpdateWithWhereUniqueWithoutCreaterInput | Prisma.BlogUpdateWithWhereUniqueWithoutCreaterInput[]
-  updateMany?: Prisma.BlogUpdateManyWithWhereWithoutCreaterInput | Prisma.BlogUpdateManyWithWhereWithoutCreaterInput[]
+  update?: Prisma.BlogUpdateWithWhereUniqueWithoutCreatorInput | Prisma.BlogUpdateWithWhereUniqueWithoutCreatorInput[]
+  updateMany?: Prisma.BlogUpdateManyWithWhereWithoutCreatorInput | Prisma.BlogUpdateManyWithWhereWithoutCreatorInput[]
   deleteMany?: Prisma.BlogScalarWhereInput | Prisma.BlogScalarWhereInput[]
 }
 
-export type BlogUncheckedUpdateManyWithoutCreaterNestedInput = {
-  create?: Prisma.XOR<Prisma.BlogCreateWithoutCreaterInput, Prisma.BlogUncheckedCreateWithoutCreaterInput> | Prisma.BlogCreateWithoutCreaterInput[] | Prisma.BlogUncheckedCreateWithoutCreaterInput[]
-  connectOrCreate?: Prisma.BlogCreateOrConnectWithoutCreaterInput | Prisma.BlogCreateOrConnectWithoutCreaterInput[]
-  upsert?: Prisma.BlogUpsertWithWhereUniqueWithoutCreaterInput | Prisma.BlogUpsertWithWhereUniqueWithoutCreaterInput[]
-  createMany?: Prisma.BlogCreateManyCreaterInputEnvelope
+export type BlogUncheckedUpdateManyWithoutCreatorNestedInput = {
+  create?: Prisma.XOR<Prisma.BlogCreateWithoutCreatorInput, Prisma.BlogUncheckedCreateWithoutCreatorInput> | Prisma.BlogCreateWithoutCreatorInput[] | Prisma.BlogUncheckedCreateWithoutCreatorInput[]
+  connectOrCreate?: Prisma.BlogCreateOrConnectWithoutCreatorInput | Prisma.BlogCreateOrConnectWithoutCreatorInput[]
+  upsert?: Prisma.BlogUpsertWithWhereUniqueWithoutCreatorInput | Prisma.BlogUpsertWithWhereUniqueWithoutCreatorInput[]
+  createMany?: Prisma.BlogCreateManyCreatorInputEnvelope
   set?: Prisma.BlogWhereUniqueInput | Prisma.BlogWhereUniqueInput[]
   disconnect?: Prisma.BlogWhereUniqueInput | Prisma.BlogWhereUniqueInput[]
   delete?: Prisma.BlogWhereUniqueInput | Prisma.BlogWhereUniqueInput[]
   connect?: Prisma.BlogWhereUniqueInput | Prisma.BlogWhereUniqueInput[]
-  update?: Prisma.BlogUpdateWithWhereUniqueWithoutCreaterInput | Prisma.BlogUpdateWithWhereUniqueWithoutCreaterInput[]
-  updateMany?: Prisma.BlogUpdateManyWithWhereWithoutCreaterInput | Prisma.BlogUpdateManyWithWhereWithoutCreaterInput[]
+  update?: Prisma.BlogUpdateWithWhereUniqueWithoutCreatorInput | Prisma.BlogUpdateWithWhereUniqueWithoutCreatorInput[]
+  updateMany?: Prisma.BlogUpdateManyWithWhereWithoutCreatorInput | Prisma.BlogUpdateManyWithWhereWithoutCreatorInput[]
   deleteMany?: Prisma.BlogScalarWhereInput | Prisma.BlogScalarWhereInput[]
 }
 
-export type BlogCreateWithoutCreaterInput = {
+export type BlogCreateWithoutCreatorInput = {
   id?: string
   title: string
   content: string
@@ -435,7 +435,7 @@ export type BlogCreateWithoutCreaterInput = {
   image?: string | null
 }
 
-export type BlogUncheckedCreateWithoutCreaterInput = {
+export type BlogUncheckedCreateWithoutCreatorInput = {
   id?: string
   title: string
   content: string
@@ -445,30 +445,30 @@ export type BlogUncheckedCreateWithoutCreaterInput = {
   image?: string | null
 }
 
-export type BlogCreateOrConnectWithoutCreaterInput = {
+export type BlogCreateOrConnectWithoutCreatorInput = {
   where: Prisma.BlogWhereUniqueInput
-  create: Prisma.XOR<Prisma.BlogCreateWithoutCreaterInput, Prisma.BlogUncheckedCreateWithoutCreaterInput>
+  create: Prisma.XOR<Prisma.BlogCreateWithoutCreatorInput, Prisma.BlogUncheckedCreateWithoutCreatorInput>
 }
 
-export type BlogCreateManyCreaterInputEnvelope = {
-  data: Prisma.BlogCreateManyCreaterInput | Prisma.BlogCreateManyCreaterInput[]
+export type BlogCreateManyCreatorInputEnvelope = {
+  data: Prisma.BlogCreateManyCreatorInput | Prisma.BlogCreateManyCreatorInput[]
   skipDuplicates?: boolean
 }
 
-export type BlogUpsertWithWhereUniqueWithoutCreaterInput = {
+export type BlogUpsertWithWhereUniqueWithoutCreatorInput = {
   where: Prisma.BlogWhereUniqueInput
-  update: Prisma.XOR<Prisma.BlogUpdateWithoutCreaterInput, Prisma.BlogUncheckedUpdateWithoutCreaterInput>
-  create: Prisma.XOR<Prisma.BlogCreateWithoutCreaterInput, Prisma.BlogUncheckedCreateWithoutCreaterInput>
+  update: Prisma.XOR<Prisma.BlogUpdateWithoutCreatorInput, Prisma.BlogUncheckedUpdateWithoutCreatorInput>
+  create: Prisma.XOR<Prisma.BlogCreateWithoutCreatorInput, Prisma.BlogUncheckedCreateWithoutCreatorInput>
 }
 
-export type BlogUpdateWithWhereUniqueWithoutCreaterInput = {
+export type BlogUpdateWithWhereUniqueWithoutCreatorInput = {
   where: Prisma.BlogWhereUniqueInput
-  data: Prisma.XOR<Prisma.BlogUpdateWithoutCreaterInput, Prisma.BlogUncheckedUpdateWithoutCreaterInput>
+  data: Prisma.XOR<Prisma.BlogUpdateWithoutCreatorInput, Prisma.BlogUncheckedUpdateWithoutCreatorInput>
 }
 
-export type BlogUpdateManyWithWhereWithoutCreaterInput = {
+export type BlogUpdateManyWithWhereWithoutCreatorInput = {
   where: Prisma.BlogScalarWhereInput
-  data: Prisma.XOR<Prisma.BlogUpdateManyMutationInput, Prisma.BlogUncheckedUpdateManyWithoutCreaterInput>
+  data: Prisma.XOR<Prisma.BlogUpdateManyMutationInput, Prisma.BlogUncheckedUpdateManyWithoutCreatorInput>
 }
 
 export type BlogScalarWhereInput = {
@@ -478,14 +478,14 @@ export type BlogScalarWhereInput = {
   id?: Prisma.StringFilter<"Blog"> | string
   title?: Prisma.StringFilter<"Blog"> | string
   content?: Prisma.StringFilter<"Blog"> | string
-  createrId?: Prisma.StringFilter<"Blog"> | string
+  creatorId?: Prisma.StringFilter<"Blog"> | string
   posted?: Prisma.BoolFilter<"Blog"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Blog"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Blog"> | Date | string
   image?: Prisma.StringNullableFilter<"Blog"> | string | null
 }
 
-export type BlogCreateManyCreaterInput = {
+export type BlogCreateManyCreatorInput = {
   id?: string
   title: string
   content: string
@@ -495,7 +495,7 @@ export type BlogCreateManyCreaterInput = {
   image?: string | null
 }
 
-export type BlogUpdateWithoutCreaterInput = {
+export type BlogUpdateWithoutCreatorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
@@ -505,7 +505,7 @@ export type BlogUpdateWithoutCreaterInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type BlogUncheckedUpdateWithoutCreaterInput = {
+export type BlogUncheckedUpdateWithoutCreatorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
@@ -515,7 +515,7 @@ export type BlogUncheckedUpdateWithoutCreaterInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type BlogUncheckedUpdateManyWithoutCreaterInput = {
+export type BlogUncheckedUpdateManyWithoutCreatorInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
@@ -531,70 +531,70 @@ export type BlogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   id?: boolean
   title?: boolean
   content?: boolean
-  createrId?: boolean
+  creatorId?: boolean
   posted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   image?: boolean
-  creater?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["blog"]>
 
 export type BlogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   content?: boolean
-  createrId?: boolean
+  creatorId?: boolean
   posted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   image?: boolean
-  creater?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["blog"]>
 
 export type BlogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   title?: boolean
   content?: boolean
-  createrId?: boolean
+  creatorId?: boolean
   posted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   image?: boolean
-  creater?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["blog"]>
 
 export type BlogSelectScalar = {
   id?: boolean
   title?: boolean
   content?: boolean
-  createrId?: boolean
+  creatorId?: boolean
   posted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   image?: boolean
 }
 
-export type BlogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "content" | "createrId" | "posted" | "createdAt" | "updatedAt" | "image", ExtArgs["result"]["blog"]>
+export type BlogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "content" | "creatorId" | "posted" | "createdAt" | "updatedAt" | "image", ExtArgs["result"]["blog"]>
 export type BlogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  creater?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type BlogIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  creater?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type BlogIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  creater?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $BlogPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Blog"
   objects: {
-    creater: Prisma.$UserPayload<ExtArgs>
+    creator: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     title: string
     content: string
-    createrId: string
+    creatorId: string
     posted: boolean
     createdAt: Date
     updatedAt: Date
@@ -993,7 +993,7 @@ readonly fields: BlogFieldRefs;
  */
 export interface Prisma__BlogClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  creater<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  creator<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1026,7 +1026,7 @@ export interface BlogFieldRefs {
   readonly id: Prisma.FieldRef<"Blog", 'String'>
   readonly title: Prisma.FieldRef<"Blog", 'String'>
   readonly content: Prisma.FieldRef<"Blog", 'String'>
-  readonly createrId: Prisma.FieldRef<"Blog", 'String'>
+  readonly creatorId: Prisma.FieldRef<"Blog", 'String'>
   readonly posted: Prisma.FieldRef<"Blog", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Blog", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Blog", 'DateTime'>

@@ -2,10 +2,35 @@ import { prisma } from "@repo/db";
 import { BlogSchema, UpdateSchema } from "@repo/zodSchema";
 import express, { Request, Response } from "express";
 import { authMiddleware } from "../auth/middleware/auth.middleware.js";
+import cloudinary from "./utils/cloudinary.utils.js";
+import { upload } from "./utils/multer.utils.js";
 const route = express.Router();
 const app = express();
 
-const createBlog = async (req: Request, res: Response) => {
+const uploadImage = async(req:Request, res:Response)=>{
+  try {
+    const file = req.file
+
+    if(!file){
+      return res.status(400).json({
+        error:"No file uploaded"
+      })
+    }
+
+    const result = await cloudinary.uploader.upload(file.path)
+
+     res.status(200).json({
+      imageUrl: result.secure_url 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Upload failed",
+    });
+  }
+}
+
+const createBlog = async (req: Request, res: Response) => {`  `
   try {
     
     const userId = req.userId
@@ -15,7 +40,6 @@ const createBlog = async (req: Request, res: Response) => {
         error :"Authorization error"
       })
     }
-    
 
     const parseData = BlogSchema.safeParse(req.body);
 
@@ -31,8 +55,8 @@ const createBlog = async (req: Request, res: Response) => {
       data: {
         title,
         content,
-        image: imageUrl,
-        creater: {
+        image: imageUrl ?? null,
+        creator: {
           connect: {
             id: userId,
           },
@@ -75,7 +99,7 @@ const getUsersAllBlogs = async(req:Request, res:Response) => {
 
     const blogs = await prisma.blog.findMany({
       where:{
-        createrId:user?.id
+        creatorId:user?.id
       }
     })
 
@@ -131,7 +155,8 @@ const deleteBlog = async (req:Request, res:Response) => {
 
   await prisma.blog.delete({
     where:{
-      id:deleteId
+      id:deleteId,
+      creatorId:req.userId
     }
   })
 
@@ -201,12 +226,13 @@ const updateBlog = async (req:Request, res:Response) => {
 
   const updatedBlog = await prisma.blog.update({
     where:{
-      id:updateId
+      id:updateId,
+      creatorId:req.userId
     },
     data:{
       title:title,
       content:content,
-      image:imageUrl
+      image:imageUrl ?? null
     }
   })
 
@@ -226,6 +252,7 @@ const updateBlog = async (req:Request, res:Response) => {
 }
 
 route.use(authMiddleware)
+route.post("/upload",upload.single("image"), uploadImage)
 route.post("/blog",  createBlog);
 route.get("/blogs",getUsersAllBlogs)
 route.get("/blog/:id",getBlog)

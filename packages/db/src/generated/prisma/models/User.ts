@@ -351,7 +351,7 @@ export type UserCreateInput = {
   passwordResetExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  blog?: Prisma.BlogCreateNestedManyWithoutCreaterInput
+  blog?: Prisma.BlogCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -369,7 +369,7 @@ export type UserUncheckedCreateInput = {
   passwordResetExpiry?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  blog?: Prisma.BlogUncheckedCreateNestedManyWithoutCreaterInput
+  blog?: Prisma.BlogUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type UserUpdateInput = {
@@ -387,7 +387,7 @@ export type UserUpdateInput = {
   passwordResetExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  blog?: Prisma.BlogUpdateManyWithoutCreaterNestedInput
+  blog?: Prisma.BlogUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -405,7 +405,7 @@ export type UserUncheckedUpdateInput = {
   passwordResetExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  blog?: Prisma.BlogUncheckedUpdateManyWithoutCreaterNestedInput
+  blog?: Prisma.BlogUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type UserCreateManyInput = {
