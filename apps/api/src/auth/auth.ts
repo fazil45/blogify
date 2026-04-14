@@ -1,4 +1,5 @@
 import "dotenv/config";
+import jwt from "jsonwebtoken"
 import express, { Request, Response } from "express";
 import { LoginSchema, UserSchema } from "@repo/zodSchema";
 import bcrypt from "bcrypt";
@@ -16,12 +17,16 @@ import {
 } from "./utils/email.utils.js";
 
 const route = express.Router();
+const options = {
+  httpOnly: true,
+  secure: true,
+};
 
 const register = async (req: Request, res: Response) => {
   try {
     const parsedSignupData = UserSchema.safeParse(req.body);
     if (!parsedSignupData.success) {
-      return res.status(404).json({ error: "Invalid inputs" });
+      return res.status(400).json({ error: "Invalid inputs" });
     }
 
     const { username, firstname, lastname, email, password } =
@@ -34,7 +39,7 @@ const register = async (req: Request, res: Response) => {
     });
 
     if (checkUserExists) {
-      return res.status(403).json({
+      return res.status(409).json({
         error: "user already exists",
       });
     }
@@ -46,17 +51,6 @@ const register = async (req: Request, res: Response) => {
         error: "Invalid error",
       });
     }
-    const refreshToken = generateRefreshToken(email);
-    const verifyToken = crypto.randomBytes(32).toString("hex");
-
-    await sendEmail({
-      email: email,
-      subject: "Verify Your Email",
-      html: emailVerificationTemplate(
-        username,
-        `${process.env.CLIENT_URL}/verify-email?token=${verifyToken}`,
-      ),
-    });
 
     const createUser = await prisma.user.create({
       data: {
@@ -65,13 +59,27 @@ const register = async (req: Request, res: Response) => {
         firstname: firstname,
         lastname: lastname,
         password: hashedPassword,
-        refreshToken: refreshToken,
       },
     });
 
+    const verifyToken = crypto.randomBytes(32).toString("hex");
+    const verifyTokenExpiry = new Date(Date.now() + 1000 * 60 * 60 * 24);
+
     await prisma.user.update({
       where: { id: createUser.id },
-      data: { emailVerifyToken: verifyToken },
+      data: {
+        emailVerifyToken: verifyToken,
+        emailVerifyTokenExpiry: verifyTokenExpiry,
+      },
+    });
+
+    await sendEmail({
+      email: email,
+      subject: "Verify Your Email",
+      html: emailVerificationTemplate(
+        username,
+        `${process.env.CLIENT_URL}/verify-email?token=${verifyToken}`,
+      ),
     });
 
     res.status(201).json({
@@ -84,13 +92,13 @@ const register = async (req: Request, res: Response) => {
   }
 };
 
-const login = async (req: Request, res: Response) => {
+const signin = async (req: Request, res: Response) => {
   try {
     const parsedLoginData = LoginSchema.safeParse(req.body);
 
     if (!parsedLoginData.success) {
-      return res.status(402).json({
-        error: "Invalid inputs",
+      return res.status(401).json({
+        error: "Invalid Inputs",
       });
     }
 
@@ -103,42 +111,56 @@ const login = async (req: Request, res: Response) => {
     });
 
     if (!userExists) {
-      return res.status(403).json({
-        error: "User not exists",
+      return res.status(401).json({
+        error: "Incorrect email or password",
       });
     }
 
-    const hashedPassword = bcrypt.compare(password, userExists.password);
+    const hashedPassword = await bcrypt.compare(password, userExists.password);
 
     if (!hashedPassword) {
       return res.status(400).json({
         error: "Invalid inputs",
       });
-    } else {
-      const accessToken = generateAccessToken(
-        userExists.id,
-        userExists.username,
-        userExists.firstname,
-        userExists.lastname!,
-      );
+    }
 
-      const options = {
-        httpOnly: true,
-        secure: true,
-      };
+    // if (!userExists.isEmailVerified) {
+    //   return res.status(403).json({ error: "Please verify your email first" });
+    // }
 
-      res.status(200).cookie("accessToken", accessToken, options).json({
+    const accessToken = generateAccessToken(
+      userExists.id,
+      userExists.username,
+      userExists.firstname,
+      userExists.lastname!,
+    );
+
+    const refreshToken = generateRefreshToken(userExists.id);
+
+    await prisma.user.update({
+      where: {
+        email: email,
+      },
+      data: {
+        refreshToken: refreshToken,
+      },
+    });
+
+    res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json({
         message: "User loggedin successfully",
         accessToken,
       });
-    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
-const logout = async (req: Request, res: Response) => {
+const signout = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).userId;
 
@@ -159,10 +181,8 @@ const logout = async (req: Request, res: Response) => {
 
     return res
       .status(200)
-      .clearCookie("accessToken", {
-        httpOnly: true,
-        secure: true,
-      })
+      .clearCookie("accessToken", options)
+      .clearCookie("refreshToken",options)
       .json({ message: "User logged out successfully" });
   } catch (error) {
     console.error(error);
@@ -172,9 +192,46 @@ const logout = async (req: Request, res: Response) => {
   }
 };
 
+const refreshAccessToken = async (req: Request, res: Response) => {
+  try {
+    const incomingRefreshToken = req.cookies?.refreshToken;
+
+    if (!incomingRefreshToken) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const decoded = jwt.verify(
+      incomingRefreshToken,
+      process.env.REFRESH_TOKEN_SECRET!
+    ) as { userId: string };
+
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+    });
+
+    if (!user || user.refreshToken !== incomingRefreshToken) {
+      return res.status(401).json({ error: "Invalid refresh token" });
+    }
+
+    const newAccessToken = generateAccessToken(
+      user.id,
+      user.username,
+      user.firstname,
+      user.lastname!
+    );
+
+    return res
+      .status(200)
+      .cookie("accessToken", newAccessToken, options)
+      .json({ accessToken: newAccessToken });
+  } catch (error) {
+    return res.status(401).json({ error: "Invalid or expired refresh token" });
+  }
+};
+
 const verifyEmail = async (req: Request, res: Response) => {
   try {
-    const { verificationToken } = req.params;
+    const { verificationToken } = req.query;
 
     if (!verificationToken || typeof verificationToken !== "string") {
       return res.status(400).json({
@@ -201,10 +258,52 @@ const verifyEmail = async (req: Request, res: Response) => {
       data: {
         isEmailVerified: true,
         emailVerifyToken: null,
+        emailVerifyTokenExpiry:null
       },
     });
 
     return res.status(200).json({ message: "Email verified successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const resendVerificationEmail = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user || user.isEmailVerified) {
+      return res.status(200).json({
+        message: "If applicable, a verification email has been sent",
+      });
+    }
+
+    const verifyToken = crypto.randomBytes(32).toString("hex");
+    const verifyTokenExpiry = new Date(Date.now() + 1000 * 60 * 60 * 24);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        emailVerifyToken: verifyToken,
+        emailVerifyTokenExpiry: verifyTokenExpiry,
+      },
+    });
+
+    await sendEmail({
+      email,
+      subject: "Verify your email",
+      html: emailVerificationTemplate(
+        user.username,
+        `${process.env.CLIENT_URL}/verify-email?token=${verifyToken}`
+      ),
+    });
+
+    return res.status(200).json({
+      message: "If applicable, a verification email has been sent",
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Internal server error" });
@@ -221,7 +320,6 @@ const forgotPassword = async (req: Request, res: Response) => {
 
     const user = await prisma.user.findUnique({ where: { email } });
 
-    // Always return 200 to avoid exposing whether email exists
     if (!user) {
       return res
         .status(200)
@@ -229,7 +327,7 @@ const forgotPassword = async (req: Request, res: Response) => {
     }
 
     const resetToken = crypto.randomBytes(32).toString("hex");
-    const expiry = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
+    const expiry = new Date(Date.now() + 1000 * 60 * 60); 
 
     await prisma.user.update({
       where: { id: user.id },
@@ -270,7 +368,7 @@ const resetPassword = async (req: Request, res: Response) => {
     const user = await prisma.user.findFirst({
       where: {
         passwordResetToken: token,
-        passwordResetExpiry: { gt: new Date() }, // not expired
+        passwordResetExpiry: { gt: new Date() },
       },
     });
 
@@ -297,9 +395,11 @@ const resetPassword = async (req: Request, res: Response) => {
 };
 
 route.post("/signup", register);
-route.post("/login", login);
-route.post("/logout", authMiddleware, logout);
+route.post("/signin", signin);
+route.post("/signout", authMiddleware, signout);
+route.post("/refresh-token", refreshAccessToken)
 route.get("/verify-email", verifyEmail);
+route.post("/resend-verification",resendVerificationEmail)
 route.post("/forgot-password", forgotPassword);
 route.post("/reset-password", resetPassword);
 

@@ -4,7 +4,6 @@ import { Request, Response,NextFunction } from "express";
 export const authMiddleware = async (req:Request, res:Response, next:NextFunction) =>{
     try {
         const token = req.cookies.accessToken
-        console.log(token)
 
         if (!token) {
             return res.status(400).json({
@@ -25,7 +24,6 @@ export const authMiddleware = async (req:Request, res:Response, next:NextFunctio
     }
 
     if (decodedToken) {
-      //@ts-ignore
       req.userId = decodedToken.userId;;
       next();
     } else {

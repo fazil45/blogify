@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/auth/auth.ts","./src/auth/middleware/auth.middleware.ts","./src/auth/utils/email.utils.ts","./src/auth/utils/token.utils.ts"],"version":"5.9.2"}
+{"root":["./src/index.ts","./src/type.d.ts","./src/auth/auth.ts","./src/auth/middleware/auth.middleware.ts","./src/auth/utils/email.utils.ts","./src/auth/utils/token.utils.ts","./src/blog/blog.ts"],"version":"5.9.2"}
