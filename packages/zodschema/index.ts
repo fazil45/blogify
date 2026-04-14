@@ -18,3 +18,9 @@ export const BlogSchema = z.object({
     content:z.string(),
     imageUrl:z.string().optional()
 })
+
+export const UpdateSchema = z.object({
+    title:z.string().optional(),
+    content:z.string().optional(),
+    imageUrl:z.string().optional()
+})

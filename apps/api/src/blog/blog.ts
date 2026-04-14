@@ -1,5 +1,5 @@
 import { prisma } from "@repo/db";
-import { BlogSchema } from "@repo/zodSchema";
+import { BlogSchema, UpdateSchema } from "@repo/zodSchema";
 import express, { Request, Response } from "express";
 import { authMiddleware } from "../auth/middleware/auth.middleware.js";
 const route = express.Router();
@@ -148,9 +148,89 @@ const deleteBlog = async (req:Request, res:Response) => {
     })
   } 
 }
+
+const getBlog = async (req:Request, res:Response) => {
+  try {
+    const blogId = req.params["id"]
+ 
+  if (!blogId || typeof blogId !== "string") {
+    return res.status(403).json({
+      error:"Blog not found"
+    })
+  }
+
+  const blog = await prisma.blog.findFirst({
+    where:{
+      id:blogId
+    }
+  })
+
+
+  res.status(401).json({
+    blog:blog
+  })
+
+  
+  } catch (error) {
+    console.error(error)
+    res.status(403).json({
+      error:"Server error"
+    })
+  } 
+}
+
+const updateBlog = async (req:Request, res:Response) => {
+  try {
+    const parseData = UpdateSchema.safeParse(req.body)
+
+    if (!parseData.success) {
+      return res.status(200).json({
+        error:"Invalid inputs"
+      })
+    }
+
+    const {title, content, imageUrl} = parseData.data
+
+    const updateId = req.params["id"]
+ 
+  if (!updateId || typeof updateId !== "string") {
+    return res.status(403).json({
+      error:"Blog not found"
+    })
+  }
+
+  const updatedBlog = await prisma.blog.update({
+    where:{
+      id:updateId
+    },
+    data:{
+      title:title,
+      content:content,
+      image:imageUrl
+    }
+  })
+
+
+  res.status(401).json({
+    blog:updateBlog,
+    error:"Blog updated succesfully"
+  })
+
+  
+  } catch (error) {
+    console.error(error)
+    res.status(403).json({
+      error:"Server error"
+    })
+  } 
+}
+
 route.use(authMiddleware)
 route.post("/blog",  createBlog);
 route.get("/blogs",getUsersAllBlogs)
+route.get("/blog/:id",getBlog)
 route.delete("/blog/:id",deleteBlog)
+route.put("/blog/:id",updateBlog)
 route.get("/allBlogs",getAllBlogs)
+
 export default route;
