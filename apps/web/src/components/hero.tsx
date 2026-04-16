@@ -64,24 +64,18 @@ export default function Hero() {
           </div>
 
           <div className="hidden lg:block relative">
-            <div className="relative">
-              <div className="absolute -top-4 -left-4 w-full h-full bg-gray-200 rounded-2xl" />
-              <img
-                src="https://images.pexels.com/photos/4348401/pexels-photo-4348401.jpeg?auto=compress&cs=tinysrgb&w=800"
-                alt="Writer at desk"
-                className="relative rounded-2xl shadow-2xl object-cover w-full h-120"
-              />
-              <div className="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-lg p-4 flex items-center gap-3">
-                <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                  <BookOpen className="w-5 h-5 text-(--text-light) dark:text-(--text-dark)" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500">Latest post</p>
-                  <p className="text-sm font-semibold text-(--text-light) dark:text-(--text-dark)">
-                    The Art of Storytelling
-                  </p>
-                </div>
+            <div className="size-100 rounded-md bg-neutral-100 z-20 relative overflow-hidden translate-x-6 p-0.5">
+              <div className="w-full h-full relative z-20 bg-white rounded-[3px] flex items-center justify-center">
+                <img
+                  src="https://images.pexels.com/photos/4348401/pexels-photo-4348401.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  alt="Writer at desk"
+                  className="relative rounded-md shadow-2xl object-cover w-full h-full"
+                />
               </div>
+              <div className="absolute h-full w-full inset-0 bg-[conic-gradient(at_center,transparent,var(--color-red)_20%,transparent_30%)] animate-spin scale-[1.2] transition-colors ease-in-out duration-500"></div>
+              <div className="absolute h-full w-full inset-0 bg-[conic-gradient(at_center,transparent,var(--color-blue)_20%,transparent_30%)] animate-spin scale-[1.2] [animation-delay:0.2s] transition-colors ease-in-out duration-500"></div>
+              <div className="absolute h-full w-full inset-0 bg-[conic-gradient(at_center,transparent,var(--color-red)_20%,transparent_30%)] animate-spin scale-[1.2] [animation-delay:0.2s] transition-colors ease-in-out duration-500"></div>
+              <div className="absolute h-full w-full inset-0 bg-[conic-gradient(at_center,transparent,var(--color-blue)_20%,transparent_30%)] animate-spin scale-[1.2] [animation-delay:0.4s] transition-colors ease-in-out duration-500"></div>
             </div>
           </div>
         </div>
@@ -89,3 +83,6 @@ export default function Hero() {
     </section>
   );
 }
+
+
+

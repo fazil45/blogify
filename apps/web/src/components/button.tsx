@@ -12,7 +12,7 @@ type ButtonProps = {
 const Button = ({ type = "button", children, onClick, size }: ButtonProps) => {
   const sizeStyles = {
     md: "px-4 py-1 text-lg",
-    lg: "px-8 py-3 text-lg",
+    lg: "px-24 py-2 text-lg",
   };
 
   return (
@@ -28,7 +28,7 @@ const Button = ({ type = "button", children, onClick, size }: ButtonProps) => {
         flex items-center justify-center
         cursor-pointer
         transition-all duration-200 font-semibold
-        bg-neutral-300 text-(--text-light) border-(--text-light) dark:bg-(--bg-dark) dark:text-(--text-dark) border dark:border-(--text-dark)
+        bg-neutral-800 text-(--text-dark)  border-(--text-dark) dark:bg-(--bg-light) dark:text-(--text-light) border-2 dark:border-(--text-light)
         ${sizeStyles[size]}
       `}
     >

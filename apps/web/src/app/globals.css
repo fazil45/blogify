@@ -6,4 +6,6 @@
   --bg-light:#eeeeee;
   --text-light: #404040;
   --text-dark:#e5e5e5;
+  --color-blue:oklch(68.5% 0.169 237.323);
+  --color-red:oklch(58.6% 0.253 17.585);
 }

@@ -29,7 +29,7 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <a href="#" className="flex items-center gap-2 shrink-0">
+          <a href="/" className="flex items-center gap-2 shrink-0">
             <PenSquare className="w-7 h-7 text-(--text-light) dark:text-(--text-dark)" />
             <span className="text-xl font-bold text-(--text-light) dark:text-(--text-dark) tracking-tight">Inkwell</span>
           </a>
@@ -55,7 +55,7 @@ export default function Navbar() {
                     placeholder="Search blogs..."
                     className="bg-transparent text-sm text-neutral-800 placeholder-gray-500 outline-none w-full"
                   />
-                  <button className="shrink-0 bg-neutral-800 text-white rounded-md p-1 hover:text-neutral-800 dark:hover:text-neutral-400 dark:hover:text-neutral-400 transition-colors">
+                  <button className="shrink-0 bg-neutral-800 text-white rounded-md p-1 hover:text-neutral-800 dark:hover:text-neutral-400 transition-colors">
                     <Search className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -76,13 +76,13 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-2">
               <a
                 href="/signin"
-                className="text-sm font-medium text-(--text-light) dark:text-(--text-dark) hover:text-neutral-800 dark:hover:text-neutral-400 dark:hover:text-neutral-400 px-3 py-1.5 rounded-md transition-colors"
+                className="text-sm font-medium text-(--text-light) dark:text-(--text-dark) hover:text-neutral-800 dark:hover:text-neutral-400 px-3 py-1.5 rounded-md transition-colors"
               >
                 Sign In
               </a>
               <a
                 href="/signup"
-                className="text-sm font-medium text-white bg-neutral-800 hover:text-neutral-800 dark:hover:text-neutral-400 dark:hover:text-neutral-400 px-4 py-1.5 rounded-md transition-colors shadow-sm"
+                className="text-sm font-medium text-white bg-neutral-800 hover:text-neutral-800 dark:hover:text-neutral-400 px-4 py-1.5 rounded-md transition-colors shadow-sm"
               >
                 Get Started
               </a>
@@ -107,7 +107,7 @@ export default function Navbar() {
             <a href="#about" className="text-sm font-medium text-(--text-light) dark:text-(--text-dark) hover:text-neutral-800 dark:hover:text-neutral-400 py-1">About</a>
             <hr className="border-gray-100" />
             <a href="/signin" className="text-sm font-medium text-(--text-light) dark:text-(--text-dark) hover:text-neutral-800 dark:hover:text-neutral-400 py-1">Sign In</a>
-            <a href="/signup" className="text-sm font-medium text-white bg-neutral-800 hover:text-neutral-800 dark:hover:text-neutral-400 dark:hover:text-neutral-400 px-4 py-2 rounded-md text-center transition-colors">
+            <a href="/signup" className="text-sm font-medium text-white bg-neutral-800 hover:text-neutral-800 dark:hover:text-neutral-400 px-4 py-2 rounded-md text-center transition-colors">
               Get Started
             </a>
           </div>
