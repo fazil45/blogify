@@ -9,7 +9,7 @@ export default function Hero() {
         <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-(--bg-light) dark:bg-(--bg-dark) rounded-full opacity-20 blur-2xl" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20"> 
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <div className="inline-flex items-center gap-2 bg-gray-100 border border-gray-200 text-black text-xs font-semibold px-4 py-2 rounded-full mb-6">
@@ -23,7 +23,7 @@ export default function Hero() {
             </h1>
 
             <p className="text-lg text-(--text-light) dark:text-(--text-dark) leading-relaxed mb-10 max-w-lg">
-              Inkwell is a modern blogging platform for thinkers, writers, and
+              Blogify is a modern blogging platform for thinkers, writers, and
               storytellers. Share your voice, discover inspiring content, and
               connect with a global community.
             </p>
@@ -47,17 +47,23 @@ export default function Hero() {
 
             <div className="mt-12 flex items-center gap-8 pt-8 border-t border-gray-100">
               <div>
-                <p className="text-2xl font-bold text-(--text-light) dark:text-(--text-dark)">12K+</p>
+                <p className="text-2xl font-bold text-(--text-light) dark:text-(--text-dark)">
+                  12K+
+                </p>
                 <p className="text-sm text-gray-500">Writers</p>
               </div>
               <div className="w-px h-10 bg-gray-200" />
               <div>
-                <p className="text-2xl font-bold text-(--text-light) dark:text-(--text-dark)">50K+</p>
+                <p className="text-2xl font-bold text-(--text-light) dark:text-(--text-dark)">
+                  50K+
+                </p>
                 <p className="text-sm text-gray-500">Articles</p>
               </div>
               <div className="w-px h-10 bg-gray-200" />
               <div>
-                <p className="text-2xl font-bold text-(--text-light) dark:text-(--text-dark)">2M+</p>
+                <p className="text-2xl font-bold text-(--text-light) dark:text-(--text-dark)">
+                  2M+
+                </p>
                 <p className="text-sm text-gray-500">Readers</p>
               </div>
             </div>
@@ -83,6 +89,3 @@ export default function Hero() {
     </section>
   );
 }
-
-
-

@@ -2,7 +2,7 @@ type Input = {
   htmlFor: string;
   type: string;
   placeholder: string;
-  onChange?: () => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
   value?: string;
   label: string;

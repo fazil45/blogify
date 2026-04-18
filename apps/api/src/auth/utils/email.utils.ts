@@ -22,7 +22,6 @@ export const sendEmail = async (options: EmailOptions): Promise<void> => {
       subject: options.subject,
       html: options.html,
     });
-    console.log("Email sent to:", options.email);
   } catch (err) {
     console.error("Email failed to send:", err);
   }

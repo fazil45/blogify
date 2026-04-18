@@ -7,20 +7,20 @@ import { upload } from "./utils/multer.utils.js";
 const route = express.Router();
 const app = express();
 
-const uploadImage = async(req:Request, res:Response)=>{
+const uploadImage = async (req: Request, res: Response) => {
   try {
-    const file = req.file
+    const file = req.file;
 
-    if(!file){
+    if (!file) {
       return res.status(400).json({
-        error:"No file uploaded"
-      })
+        error: "No file uploaded",
+      });
     }
 
-    const result = await cloudinary.uploader.upload(file.path)
+    const result = await cloudinary.uploader.upload(file.path);
 
-     res.status(200).json({
-      imageUrl: result.secure_url 
+    res.status(200).json({
+      imageUrl: result.secure_url,
     });
   } catch (error) {
     console.error(error);
@@ -28,23 +28,23 @@ const uploadImage = async(req:Request, res:Response)=>{
       error: "Upload failed",
     });
   }
-}
+};
 
-const createBlog = async (req: Request, res: Response) => {`  `
+const createBlog = async (req: Request, res: Response) => {
+  `  `;
   try {
-    
-    const userId = req.userId
+    const userId = req.userId;
 
     if (!userId) {
-      return res.status(403).json({
-        error :"Authorization error"
-      })
+      return res.status(401).json({
+        error: "Authorization error",
+      });
     }
 
     const parseData = BlogSchema.safeParse(req.body);
 
     if (!parseData.success) {
-      return res.status(403).json({
+      return res.status(400).json({
         error: "Invalid inputs",
       });
     }
@@ -69,195 +69,184 @@ const createBlog = async (req: Request, res: Response) => {`  `
     });
   } catch (error) {
     console.error(error);
-    res.status(400).json({
-      error: "Server Error",
+    res.status(500).json({
+      error: "Server error",
     });
   }
 };
 
-const getUsersAllBlogs = async(req:Request, res:Response) => {
+const getUsersAllBlogs = async (req: Request, res: Response) => {
   try {
-    const userId = req.userId
+    const userId = req.userId;
 
     if (!userId) {
-      return res.status(403).json({
-        error:"Authorization error"
-      })
+      return res.status(401).json({
+        error: "Authorization error",
+      });
     }
 
     const user = await prisma.user.findUnique({
-      where:{
-        id:userId
-      }
-    })
+      where: {
+        id: userId,
+      },
+    });
 
     if (!user) {
       return res.status(404).json({
-        error:"Unauthorized"
-      })
+        error: "User not found",
+      });
     }
 
     const blogs = await prisma.blog.findMany({
-      where:{
-        creatorId:user?.id
-      }
-    })
+      where: {
+        creatorId: user.id,
+      },
+    });
 
-    if (!blogs) {
-      return res.status(404).json({
-        error:"blogs not created yet"
-      })
-    }
-
-    res.status(202).json({
-      blogs:blogs
-    })
-
-
+    res.status(200).json({
+      blogs,
+    });
   } catch (error) {
-    console.error(error)
-    res.status(403).json({
-      error:"Server error"
-    })
+    console.error(error);
+    res.status(500).json({
+      error: "Server error",
+    });
   }
-}
+};
 
-const getAllBlogs = async (req:Request,res:Response) => {
+const getAllBlogs = async (req: Request, res: Response) => {
   try {
-    const allBlog = await prisma.blog.findMany()
+    const allBlog = await prisma.blog.findMany();
 
     if (!allBlog) {
-      res.status(402).json({
-        error:"Something went wrong.."
-      })
+      return res.status(500).json({
+        error: "Something went wrong",
+      });
     }
 
-    res.status(202).json({
-      blogs:allBlog
-    })
+    res.status(200).json({
+      blogs: allBlog,
+    });
   } catch (error) {
-    console.error(error)
-    res.status(404).json({
-      error:"Server Error"
-    })
+    console.error(error);
+    res.status(500).json({
+      error: "Server error",
+    });
   }
-}
+};
 
-const deleteBlog = async (req:Request, res:Response) => {
+const deleteBlog = async (req: Request, res: Response) => {
   try {
-    const deleteId = req.params["id"]
- 
-  if (!deleteId || typeof deleteId !== "string") {
-    return res.status(403).json({
-      error:"Blog not found"
-    })
-  }
+    const deleteId = req.params["id"];
 
-  await prisma.blog.delete({
-    where:{
-      id:deleteId,
-      creatorId:req.userId
+    if (!deleteId || typeof deleteId !== "string") {
+      return res.status(400).json({
+        error: "Blog id is required",
+      });
     }
-  })
 
+    await prisma.blog.delete({
+      where: {
+        id: deleteId,
+        creatorId: req.userId,
+      },
+    });
 
-  res.status(401).json({
-    error:"Blog deleted succesfully"
-  })
-
-  
+    res.status(200).json({
+      message: "Blog deleted successfully",
+    });
   } catch (error) {
-    console.error(error)
-    res.status(403).json({
-      error:"Server error"
-    })
-  } 
-}
-
-const getBlog = async (req:Request, res:Response) => {
-  try {
-    const blogId = req.params["id"]
- 
-  if (!blogId || typeof blogId !== "string") {
-    return res.status(403).json({
-      error:"Blog not found"
-    })
+    console.error(error);
+    res.status(500).json({
+      error: "Server error",
+    });
   }
+};
 
-  const blog = await prisma.blog.findFirst({
-    where:{
-      id:blogId
-    }
-  })
-
-
-  res.status(401).json({
-    blog:blog
-  })
-
-  
-  } catch (error) {
-    console.error(error)
-    res.status(403).json({
-      error:"Server error"
-    })
-  } 
-}
-
-const updateBlog = async (req:Request, res:Response) => {
+const getBlog = async (req: Request, res: Response) => {
   try {
-    const parseData = UpdateSchema.safeParse(req.body)
+    const blogId = req.params["id"];
+
+    if (!blogId || typeof blogId !== "string") {
+      return res.status(400).json({
+        error: "Blog id is required",
+      });
+    }
+
+    const blog = await prisma.blog.findFirst({
+      where: {
+        id: blogId,
+      },
+    });
+
+    if (!blog) {
+      return res.status(404).json({
+        error: "Blog not found",
+      });
+    }
+
+    res.status(200).json({
+      blog,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Server error",
+    });
+  }
+};
+
+const updateBlog = async (req: Request, res: Response) => {
+  try {
+    const parseData = UpdateSchema.safeParse(req.body);
 
     if (!parseData.success) {
-      return res.status(200).json({
-        error:"Invalid inputs"
-      })
+      return res.status(400).json({
+        error: "Invalid inputs",
+      });
     }
 
-    const {title, content, imageUrl} = parseData.data
+    const { title, content, imageUrl } = parseData.data;
 
-    const updateId = req.params["id"]
- 
-  if (!updateId || typeof updateId !== "string") {
-    return res.status(403).json({
-      error:"Blog not found"
-    })
-  }
+    const updateId = req.params["id"];
 
-  const updatedBlog = await prisma.blog.update({
-    where:{
-      id:updateId,
-      creatorId:req.userId
-    },
-    data:{
-      title:title,
-      content:content,
-      image:imageUrl ?? null
+    if (!updateId || typeof updateId !== "string") {
+      return res.status(400).json({
+        error: "Blog id is required",
+      });
     }
-  })
 
+    const updatedBlog = await prisma.blog.update({
+      where: {
+        id: updateId,
+        creatorId: req.userId,
+      },
+      data: {
+        title,
+        content,
+        image: imageUrl ?? null,
+      },
+    });
 
-  res.status(401).json({
-    blog:updateBlog,
-    error:"Blog updated succesfully"
-  })
-
-  
+    res.status(200).json({
+      blog: updatedBlog,
+      message: "Blog updated successfully",
+    });
   } catch (error) {
-    console.error(error)
-    res.status(403).json({
-      error:"Server error"
-    })
-  } 
-}
+    console.error(error);
+    res.status(500).json({
+      error: "Server error",
+    });
+  }
+};
 
-route.use(authMiddleware)
-route.post("/upload",upload.single("image"), uploadImage)
-route.post("/blog",  createBlog);
-route.get("/blogs",getUsersAllBlogs)
-route.get("/blog/:id",getBlog)
-route.delete("/blog/:id",deleteBlog)
-route.put("/blog/:id",updateBlog)
-route.get("/allBlogs",getAllBlogs)
+route.use(authMiddleware);
+route.post("/upload", upload.single("image"), uploadImage);
+route.post("/blog", createBlog);
+route.get("/blogs", getUsersAllBlogs);
+route.get("/blog/:id", getBlog);
+route.delete("/blog/:id", deleteBlog);
+route.put("/blog/:id", updateBlog);
+route.get("/allBlogs", getAllBlogs);
 
 export default route;

@@ -1,5 +1,5 @@
 import "dotenv/config";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 import express, { Request, Response } from "express";
 import { LoginSchema, UserSchema } from "@repo/zodSchema";
 import bcrypt from "bcrypt";
@@ -47,8 +47,8 @@ const register = async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     if (!hashedPassword) {
-      return res.status(402).json({
-        error: "Invalid error",
+      return res.status(500).json({
+        error: "Unable to hash password",
       });
     }
 
@@ -97,8 +97,8 @@ const signin = async (req: Request, res: Response) => {
     const parsedLoginData = LoginSchema.safeParse(req.body);
 
     if (!parsedLoginData.success) {
-      return res.status(401).json({
-        error: "Invalid Inputs",
+      return res.status(400).json({
+        error: "Invalid inputs",
       });
     }
 
@@ -116,17 +116,17 @@ const signin = async (req: Request, res: Response) => {
       });
     }
 
-    const hashedPassword = await bcrypt.compare(password, userExists.password);
+    const passwordMatch = await bcrypt.compare(password, userExists.password);
 
-    if (!hashedPassword) {
-      return res.status(400).json({
-        error: "Invalid inputs",
+    if (!passwordMatch) {
+      return res.status(401).json({
+        error: "Incorrect email or password",
       });
     }
 
-    // if (!userExists.isEmailVerified) {
-    //   return res.status(403).json({ error: "Please verify your email first" });
-    // }
+    if (!userExists.isEmailVerified) {
+      return res.status(403).json({ error: "Please verify your email first" });
+    }
 
     const accessToken = generateAccessToken(
       userExists.id,
@@ -182,7 +182,7 @@ const signout = async (req: Request, res: Response) => {
     return res
       .status(200)
       .clearCookie("accessToken", options)
-      .clearCookie("refreshToken",options)
+      .clearCookie("refreshToken", options)
       .json({ message: "User logged out successfully" });
   } catch (error) {
     console.error(error);
@@ -202,7 +202,7 @@ const refreshAccessToken = async (req: Request, res: Response) => {
 
     const decoded = jwt.verify(
       incomingRefreshToken,
-      process.env.REFRESH_TOKEN_SECRET!
+      process.env.REFRESH_TOKEN_SECRET!,
     ) as { userId: string };
 
     const user = await prisma.user.findUnique({
@@ -217,7 +217,7 @@ const refreshAccessToken = async (req: Request, res: Response) => {
       user.id,
       user.username,
       user.firstname,
-      user.lastname!
+      user.lastname!,
     );
 
     return res
@@ -231,7 +231,7 @@ const refreshAccessToken = async (req: Request, res: Response) => {
 
 const verifyEmail = async (req: Request, res: Response) => {
   try {
-    const { verificationToken } = req.query;
+    const { verificationToken } = req.body;
 
     if (!verificationToken || typeof verificationToken !== "string") {
       return res.status(400).json({
@@ -258,7 +258,7 @@ const verifyEmail = async (req: Request, res: Response) => {
       data: {
         isEmailVerified: true,
         emailVerifyToken: null,
-        emailVerifyTokenExpiry:null
+        emailVerifyTokenExpiry: null,
       },
     });
 
@@ -297,7 +297,7 @@ const resendVerificationEmail = async (req: Request, res: Response) => {
       subject: "Verify your email",
       html: emailVerificationTemplate(
         user.username,
-        `${process.env.CLIENT_URL}/verify-email?token=${verifyToken}`
+        `${process.env.CLIENT_URL}/verify-email?token=${verifyToken}`,
       ),
     });
 
@@ -327,7 +327,7 @@ const forgotPassword = async (req: Request, res: Response) => {
     }
 
     const resetToken = crypto.randomBytes(32).toString("hex");
-    const expiry = new Date(Date.now() + 1000 * 60 * 60); 
+    const expiry = new Date(Date.now() + 1000 * 60 * 60);
 
     await prisma.user.update({
       where: { id: user.id },
@@ -394,13 +394,48 @@ const resetPassword = async (req: Request, res: Response) => {
   }
 };
 
+const checkUsername = async (req: Request, res: Response) => {
+  try {
+    const username = req.params["username"];
+    if (!username || typeof username !== "string") {
+      return res.status(400).json({
+        error: "Username is required",
+      });
+    }
+
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        username,
+      },
+    });
+
+    if (existingUser) {
+      return res.status(409).json({
+        available:false,
+        error: "Username already taken",
+      });
+    }
+
+    return res.status(200).json({
+      available:true
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Server error",
+    });
+  }
+};
+
 route.post("/signup", register);
 route.post("/signin", signin);
-route.post("/signout", authMiddleware, signout);
-route.post("/refresh-token", refreshAccessToken)
-route.get("/verify-email", verifyEmail);
-route.post("/resend-verification",resendVerificationEmail)
+route.post("/verify-email", verifyEmail);
+route.post("/refresh-token", refreshAccessToken);
+route.post("/resend-verification", resendVerificationEmail);
 route.post("/forgot-password", forgotPassword);
 route.post("/reset-password", resetPassword);
+route.get("/check/:username",checkUsername)
+route.post("/signout", authMiddleware, signout);
+
 
 export default route;
