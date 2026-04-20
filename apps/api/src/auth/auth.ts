@@ -1,5 +1,5 @@
 import "dotenv/config";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import express, { Request, Response } from "express";
 import { LoginSchema, UserSchema } from "@repo/zodSchema";
 import bcrypt from "bcrypt";
@@ -16,12 +16,8 @@ import {
   sendEmail,
 } from "./utils/email.utils.js";
 
+const isProduction = process.env.NODE_ENV === "production";
 const route = express.Router();
-const options = {
-  httpOnly: true,
-  secure: true,
-};
-
 const register = async (req: Request, res: Response) => {
   try {
     const parsedSignupData = UserSchema.safeParse(req.body);
@@ -124,9 +120,9 @@ const signin = async (req: Request, res: Response) => {
       });
     }
 
-    if (!userExists.isEmailVerified) {
-      return res.status(403).json({ error: "Please verify your email first" });
-    }
+    // if (!userExists.isEmailVerified) {
+    //   return res.status(403).json({ error: "Please verify your email first" });
+    // }
 
     const accessToken = generateAccessToken(
       userExists.id,
@@ -148,8 +144,18 @@ const signin = async (req: Request, res: Response) => {
 
     res
       .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
+      .cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: isProduction, 
+        sameSite: isProduction ? "none" : "lax",
+        maxAge: 15 * 60 * 1000,
+      })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: isProduction, 
+        sameSite: isProduction ? "none" : "lax",
+        maxAge: 15 * 60 * 1000,
+      })
       .json({
         message: "User loggedin successfully",
         accessToken,
@@ -181,8 +187,18 @@ const signout = async (req: Request, res: Response) => {
 
     return res
       .status(200)
-      .clearCookie("accessToken", options)
-      .clearCookie("refreshToken", options)
+      .clearCookie("accessToken", {
+        httpOnly: true,
+        secure: isProduction, 
+        sameSite: isProduction ? "none" : "lax",
+        maxAge: 15 * 60 * 1000,
+      })
+      .clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: isProduction, 
+        sameSite: isProduction ? "none" : "lax",
+        maxAge: 15 * 60 * 1000,
+      })
       .json({ message: "User logged out successfully" });
   } catch (error) {
     console.error(error);
@@ -222,7 +238,12 @@ const refreshAccessToken = async (req: Request, res: Response) => {
 
     return res
       .status(200)
-      .cookie("accessToken", newAccessToken, options)
+      .cookie("accessToken", newAccessToken, {
+        httpOnly: true,
+        secure: isProduction, 
+        sameSite: isProduction ? "none" : "lax",
+        maxAge: 15 * 60 * 1000,
+      })
       .json({ accessToken: newAccessToken });
   } catch (error) {
     return res.status(401).json({ error: "Invalid or expired refresh token" });
@@ -411,13 +432,13 @@ const checkUsername = async (req: Request, res: Response) => {
 
     if (existingUser) {
       return res.status(409).json({
-        available:false,
+        available: false,
         error: "Username already taken",
       });
     }
 
     return res.status(200).json({
-      available:true
+      available: true,
     });
   } catch (error) {
     console.error(error);
@@ -427,15 +448,51 @@ const checkUsername = async (req: Request, res: Response) => {
   }
 };
 
+const me = async (req:Request, res:Response) => {
+  try {
+    const token = req.cookies.accessToken
+
+    if (!token) {
+      return res.status(401).json({
+        user:null
+      })
+    }
+
+    const decoded = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET!) as JwtPayload
+
+    const user = await prisma.user.findUnique({
+      where:{
+        id:decoded.userId
+      },
+      select:{
+        id:true,
+        firstname:true,
+        lastname:true,
+        username:true,
+        email:true
+      }
+    })
+
+    res.status(200).json({
+      user
+    })
+  } catch (error) {
+      console.error(error)
+      res.status(500).json({
+        error:"Server Error"
+      })
+  }
+}
+
 route.post("/signup", register);
 route.post("/signin", signin);
 route.post("/verify-email", verifyEmail);
+route.get("/me",me)
 route.post("/refresh-token", refreshAccessToken);
 route.post("/resend-verification", resendVerificationEmail);
 route.post("/forgot-password", forgotPassword);
 route.post("/reset-password", resetPassword);
-route.get("/check/:username",checkUsername)
+route.get("/check/:username", checkUsername);
 route.post("/signout", authMiddleware, signout);
-
 
 export default route;

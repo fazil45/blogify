@@ -38,6 +38,9 @@ const Signin = () => {
             email,
             password,
           },
+          {
+            withCredentials: true,
+          },
         );
         alert("signed in succesfully");
         route.push("/dashboard");
@@ -116,7 +119,7 @@ const Signin = () => {
           }}
         />
         <div className="flex items-center justify-center mt-8">
-          <Button size="lg" children="Signin"  type="submit"/>
+          <Button size="lg" children="Signin" type="submit" />
         </div>
         <div className="flex items-center justify-center gap-2 mb-8">
           <span className="font-medium">Create an account</span>{" "}

@@ -1,5 +1,5 @@
 {
-  "name": "trading-app",
+  "name": "blog-app",
   "private": true,
   "scripts": {
     "build": "turbo run build",

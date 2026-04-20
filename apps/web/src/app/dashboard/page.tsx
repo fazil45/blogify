@@ -1,9 +1,31 @@
-import React from 'react'
+"use client";
+import BlogsSection from "@/components/blogSection";
+import CreateBlogSection from "@/components/createBlogSection";
+import ProfileSection from "@/components/profileSection";
+import { useAuthStore } from "@/store/authStore";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-const BlogPage = () => {
+export default function Dashboard() {
+  const route = useRouter();
+  const { user,fetchUser } = useAuthStore();
+
+  useEffect(() => {
+    fetchUser()
+  },[])
+  if (!user) {
+    setTimeout(() => {
+      route.push("/signin");
+    }, 5000);
+  }
+
   return (
-    <div className='h-screen w-screen flex items-center justify-center text-6xl text-black dark:text-white'>BlogPage</div>
-  )
+    <div className="grid grid-cols-12 gap-4 mt-16 p-4 h-[calc(100vh-4rem)]">
+      <ProfileSection />
+      <BlogsSection />
+      <div className="col-span-3">
+        <CreateBlogSection />
+      </div>
+    </div>
+  );
 }
-
-export default BlogPage

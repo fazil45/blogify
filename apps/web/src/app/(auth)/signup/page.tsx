@@ -21,7 +21,7 @@ const Singup = () => {
       firstname: "",
       lastname: "",
       password: "",
-    },
+    },  
     validators: {
       onChange: UserFormSchema,
     },

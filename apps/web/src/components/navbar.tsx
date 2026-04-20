@@ -1,13 +1,16 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { Search, SquarePen as PenSquare, X, Menu } from "lucide-react";
+import { Search, SquarePen as PenSquare, X, Menu, Loader2, User } from "lucide-react";
+
 import ThemeToggle from "./themeToggle";
+import { useAuthStore } from "@/store/authStore";
 
 export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
+  const { user, loading } = useAuthStore();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -101,20 +104,28 @@ export default function Navbar() {
               <ThemeToggle />
             </div>
 
-            <div className="hidden md:flex items-center gap-2">
-              <a
-                href="/signin"
-                className="text-sm font-medium text-neutral-600 bg-neutral-100 hover:text-neutral-800 dark:hover:text-neutral-400 px-4 py-1.5 rounded-md transition-colors shadow-sm"
-              >
-                Sign In
-              </a>
-              <a
-                href="/signup"
-                className="text-sm font-medium text-white bg-neutral-800 hover:text-neutral-300 dark:hover:text-neutral-400 px-4 py-1.5 rounded-md transition-colors shadow-sm"
-              >
-                Get Started
-              </a>
-            </div>
+            {loading ? (
+              <div className="flex">
+                <Loader2 className="animate-spin" />
+              </div>
+            ) : user ? (
+              <div>{ <button><User/></button>}</div>
+            ) : (
+              <div className="hidden md:flex items-center gap-2">
+                <a
+                  href="/signin"
+                  className="text-sm font-medium text-neutral-600 bg-neutral-100 hover:text-neutral-800 dark:hover:text-neutral-400 px-4 py-1.5 rounded-md transition-colors shadow-sm"
+                >
+                  Sign In
+                </a>
+                <a
+                  href="/signup"
+                  className="text-sm font-medium text-white bg-neutral-800 hover:text-neutral-300 dark:hover:text-neutral-400 px-4 py-1.5 rounded-md transition-colors shadow-sm"
+                >
+                  Get Started
+                </a>
+              </div>
+            )}
 
             <button
               onClick={() => setMenuOpen(!menuOpen)}

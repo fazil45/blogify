@@ -5,73 +5,56 @@ import { authMiddleware } from "../auth/middleware/auth.middleware.js";
 import cloudinary from "./utils/cloudinary.utils.js";
 import { upload } from "./utils/multer.utils.js";
 const route = express.Router();
-const app = express();
-
-const uploadImage = async (req: Request, res: Response) => {
-  try {
-    const file = req.file;
-
-    if (!file) {
-      return res.status(400).json({
-        error: "No file uploaded",
-      });
-    }
-
-    const result = await cloudinary.uploader.upload(file.path);
-
-    res.status(200).json({
-      imageUrl: result.secure_url,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      error: "Upload failed",
-    });
-  }
-};
 
 const createBlog = async (req: Request, res: Response) => {
-  `  `;
   try {
     const userId = req.userId;
-
     if (!userId) {
-      return res.status(401).json({
-        error: "Authorization error",
-      });
+      return res.status(401).json({ error: "Authorization error" });
     }
 
-    const parseData = BlogSchema.safeParse(req.body);
+    const { title, content } = req.body;
+    const file = req.file;
 
+    let imageUrl: string | null = null;
+
+    if (file) {
+      const uploadToCloudinary = (): Promise<string> => {
+        return new Promise((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            { folder: "blogs" },
+            (error, result) => {
+              if (error) reject(error);
+              else if (!result) reject(new Error("No result from cloudinary"));
+              else resolve(result.secure_url);
+            },
+          );
+          stream.end(file.buffer);
+        });
+      };
+
+      imageUrl = await uploadToCloudinary();
+    }
+
+    const parseData = BlogSchema.safeParse({ title, content, imageUrl });
     if (!parseData.success) {
-      return res.status(400).json({
-        error: "Invalid inputs",
-      });
+      return res.status(400).json({ error: parseData.error.message });
     }
-
-    const { title, content, imageUrl } = parseData.data;
 
     await prisma.blog.create({
       data: {
-        title,
-        content,
-        image: imageUrl ?? null,
-        creator: {
-          connect: {
-            id: userId,
-          },
-        },
+        title: parseData.data.title,
+        content: parseData.data.content,
+        image: imageUrl,
+        posted: true,
+        creator: { connect: { id: userId } },
       },
     });
 
-    res.status(201).json({
-      message: "Blog created succesfully",
-    });
+    res.status(201).json({ message: "Blog created successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
-      error: "Server error",
-    });
+    res.status(500).json({ error: "Server error" });
   }
 };
 
@@ -101,6 +84,16 @@ const getUsersAllBlogs = async (req: Request, res: Response) => {
       where: {
         creatorId: user.id,
       },
+      include: {
+        creator: {
+          select: {
+            firstname: true,
+            lastname: true,
+            username: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
     });
 
     res.status(200).json({
@@ -116,7 +109,29 @@ const getUsersAllBlogs = async (req: Request, res: Response) => {
 
 const getAllBlogs = async (req: Request, res: Response) => {
   try {
-    const allBlog = await prisma.blog.findMany();
+    const limit = parseInt(req.query.limit as string) || 10;
+    const cursor = req.query.cursor as string | undefined;
+
+    const allBlog = await prisma.blog.findMany({
+      take: limit + 1,
+      skip: cursor ? 1 : 0,
+      cursor: cursor ? { id: cursor } : undefined,
+      orderBy: { createdAt: "desc" },
+      include: {
+        creator: {
+          select: {
+            firstname: true,
+            lastname: true,
+            username: true,
+          },
+        },
+      },
+    });
+
+    const hasMore = allBlog.length > limit;
+    if (hasMore) allBlog.pop(); // remove the extra item
+
+    const nextCursor = hasMore ? allBlog[allBlog.length - 1]?.id : null;
 
     if (!allBlog) {
       return res.status(500).json({
@@ -126,6 +141,7 @@ const getAllBlogs = async (req: Request, res: Response) => {
 
     res.status(200).json({
       blogs: allBlog,
+      nextCursor,
     });
   } catch (error) {
     console.error(error);
@@ -241,8 +257,7 @@ const updateBlog = async (req: Request, res: Response) => {
 };
 
 route.use(authMiddleware);
-route.post("/upload", upload.single("image"), uploadImage);
-route.post("/blog", createBlog);
+route.post("/blog", upload.single("imageUrl"), createBlog);
 route.get("/blogs", getUsersAllBlogs);
 route.get("/blog/:id", getBlog);
 route.delete("/blog/:id", deleteBlog);

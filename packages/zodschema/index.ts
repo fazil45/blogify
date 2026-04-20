@@ -8,7 +8,7 @@ export const UserSchema = z.object({
     .min(3, "Minimum 3 characters required")
     .max(30, "Not exceed 30 characters limit")
     .nonempty("Cannot be empty"),
-  lastname: z.string().default(""),
+  lastname: z.string().optional(),
   password: z
     .string()
     .regex(/[a-z]/, "Password must contain at least one lowercase letter")
@@ -32,9 +32,14 @@ export const LoginSchema = z.object({
 });
 
 export const BlogSchema = z.object({
-  title: z.string(),
-  content: z.string(),
-  imageUrl: z.string().optional(),
+  title: z.string().min(1, "Title is required"),
+  content: z.string().min(1, "Content is required"),
+  imageUrl: z.string().url().nullable().optional(),
+})
+
+export const BlogFormSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  content: z.string().min(1, "Content is required"),
 });
 
 export const UpdateSchema = z.object({

@@ -78,10 +78,7 @@ export default function Hero() {
                   className="relative rounded-md shadow-2xl object-cover w-full h-full"
                 />
               </div>
-              <div className="absolute h-full w-full inset-0 bg-[conic-gradient(at_center,transparent,var(--color-red)_20%,transparent_30%)] animate-spin scale-[1.2] transition-colors ease-in-out duration-500"></div>
-              <div className="absolute h-full w-full inset-0 bg-[conic-gradient(at_center,transparent,var(--color-blue)_20%,transparent_30%)] animate-spin scale-[1.2] [animation-delay:0.2s] transition-colors ease-in-out duration-500"></div>
-              <div className="absolute h-full w-full inset-0 bg-[conic-gradient(at_center,transparent,var(--color-red)_20%,transparent_30%)] animate-spin scale-[1.2] [animation-delay:0.2s] transition-colors ease-in-out duration-500"></div>
-              <div className="absolute h-full w-full inset-0 bg-[conic-gradient(at_center,transparent,var(--color-blue)_20%,transparent_30%)] animate-spin scale-[1.2] [animation-delay:0.4s] transition-colors ease-in-out duration-500"></div>
+              <div className="absolute h-full w-full inset-0 bg-[conic-gradient(at_center,transparent,var(--text-light)_20%,transparent_30%)] animate-spin scale-[1.2] transition-colors ease-in-out duration-500"></div>
             </div>
           </div>
         </div>
