@@ -22,7 +22,7 @@ const Singup = () => {
       firstname: "",
       lastname: "",
       password: "",
-    },  
+    },
     validators: {
       onChange: UserFormSchema,
     },
@@ -90,7 +90,7 @@ const Singup = () => {
       }
     },
   });
-  
+
   return (
     <div>
       <AuthLayout>
@@ -227,17 +227,20 @@ const Singup = () => {
               );
             }}
           />
-          <div className="flex items-center justify-center mt-8">
+          <div className="flex  items-center justify-center mt-8">
             <Button size="lg" type="submit">
               {isSignedUp ? "Creating..." : "Create an account"}
             </Button>
           </div>
           <div className="flex items-center justify-center gap-2">
-            <span className="font-medium">Already have account?</span>{" "}
-            <span>
-              <Link className="text-blue-900" href={"/signin"}>
-                Signin
-              </Link>
+            <span
+              className="px-8 py-2 text-lg relative overflow-hidden rounded-md 
+        flex items-center justify-center
+        cursor-pointer
+        transition-all duration-200 font-semibold
+        bg-slate-400 text-(--text-light)  border-(--text-dark) dark:bg-(--bg-light) dark:text-(--text-light) border-2 dark:border-(--text-light) hover:scale-105"
+            >
+              <Link href={"/signin"}>I already have an account</Link>
             </span>
           </div>
         </form>

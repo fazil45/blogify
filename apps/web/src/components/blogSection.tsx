@@ -1,16 +1,18 @@
-"use client"
-import React, { useEffect, useState } from "react";
+"use client";
+import React, { useEffect, useRef, useState } from "react";
 import BlogCard from "./blogCard";
 import api from "@/lib/axios";
 import { Blog } from "@/types/blog";
 import axios from "axios";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 const BlogsSection = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const loaderRef = useRef<HTMLDivElement>(null);
 
   const fetchBlog = async () => {
     if (loading || !hasMore) return;
@@ -20,7 +22,13 @@ const BlogsSection = () => {
       const { data } = await api.get("/allBlogs", {
         params: { limit: 10, cursor: nextCursor ?? undefined },
       });
-      setBlogs((prev) => [...prev, ...data.blogs]);
+      setBlogs((prev) => {
+        const all = [...prev, ...data.blogs];
+
+        const unique = Array.from(new Map(all.map((b) => [b.id, b])).values());
+
+        return unique;
+      });
       setNextCursor(data.nextCursor);
       setHasMore(data.nextCursor !== null);
     } catch (error) {
@@ -39,13 +47,20 @@ const BlogsSection = () => {
   }, []);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) fetchBlog();
-    });
-    // if (loaderRef.current) observer.observe(loader.current)
+    if (!loaderRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchBlog();
+        }
+      },
+      { threshold: 1 },
+    );
+    if (loaderRef.current) observer.observe(loaderRef.current);
 
     return () => observer.disconnect();
-  }, [nextCursor, loading]);
+  }, [hasMore, loading]);
 
   return (
     <div className="col-span-6 bg-white dark:bg-neutral-900 p-4 rounded-xl shadow overflow-y-auto">
@@ -56,6 +71,13 @@ const BlogsSection = () => {
         {blogs.map((blog) => (
           <BlogCard key={blog.id} blog={blog} />
         ))}
+      </div>
+      <div
+        ref={loaderRef}
+        className="flex items-center justify-center py-6 gap-2"
+      >
+        {loading && <Loader2 className="w-4 h-4 animate-spin text-zinc-400" />}
+        {!hasMore && <p className="text-xs text-zinc-400">No more posts</p>}
       </div>
     </div>
   );

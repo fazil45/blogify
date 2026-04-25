@@ -13,7 +13,8 @@ import { useState } from "react";
 
 const Signin = () => {
   const route = useRouter();
-  const [isSignin, setIsSignin] = useState(false)
+  const [isSignin, setIsSignin] = useState(false);
+
   const form = useForm({
     defaultValues: {
       email: "",
@@ -35,7 +36,7 @@ const Signin = () => {
       const password = value.password;
 
       try {
-        setIsSignin(true)
+        setIsSignin(true);
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_HTTP_URL}/auth/signin`,
           {
@@ -46,11 +47,11 @@ const Signin = () => {
             withCredentials: true,
           },
         );
-        setIsSignin(false)
+        setIsSignin(false);
         toast.success("signed in succesfully");
         route.push("/dashboard");
       } catch (error) {
-        setIsSignin(false)
+        setIsSignin(false);
         if (axios.isAxiosError(error)) {
           toast.error(error.response?.data.error || "Something went wrong");
         } else {
@@ -124,16 +125,28 @@ const Signin = () => {
             );
           }}
         />
-        <div className="flex items-center justify-center mt-8">
-          <Button size="lg" children={isSignin ? "Signing.." :"Signin"} type="submit" />
+        <div className="flex flex-col gap-2 items-center justify-center m-6">
+
+          <button onClick={() => route.push("/forgot-password")} type="button" className="bg-neutral-100 cursor-pointer rounded-md px-8 py-2 text-(--text-light) dark:text-(--text-dark)">
+            Forgot password
+          </button>
+
+          <Button
+            size="lg"
+            children={isSignin ? "Signing.." : "Signin"}
+            type="submit"
+          />
         </div>
         <div className="flex items-center justify-center gap-2 mb-8">
-          <span className="font-medium">Create an account</span>{" "}
-          <span>
-            <Link className="text-blue-900" href={"/signup"}>
-              Signup
-            </Link>
-          </span>
+          <button
+            className="px-8 py-2 text-lg relative overflow-hidden rounded-md 
+        flex items-center justify-center
+        cursor-pointer
+        transition-all duration-200 font-semibold
+        bg-slate-400 text-(--text-light)  border-(--text-dark) dark:bg-(--bg-light) dark:text-(--text-light) border-2 dark:border-(--text-light) hover:scale-105"
+          >
+            <Link href={"/signup"}>Create new account</Link>
+          </button>
         </div>
       </form>
     </AuthLayout>

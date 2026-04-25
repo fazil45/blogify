@@ -10,8 +10,6 @@ export const authMiddleware = async (
     const token = req.cookies.accessToken;
 
     if (!token) {
-      console.log("Verify getting here", token, "token");
-
       return res.status(401).json({
         error: "Unauthorized request",
       });

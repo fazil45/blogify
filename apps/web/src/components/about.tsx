@@ -19,7 +19,7 @@ export default function About() {
             <img
               src="https://images.pexels.com/photos/3861958/pexels-photo-3861958.jpeg?auto=compress&cs=tinysrgb&w=800"
               alt="Team collaborating"
-              className="relative rounded-3xl shadow-xl object-cover w-full h-[420px]"
+              className="relative rounded-3xl shadow-xl object-cover w-full h-105"
             />
           </div>
 
