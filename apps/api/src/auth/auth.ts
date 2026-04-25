@@ -1,7 +1,7 @@
 import "dotenv/config";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import express, { Request, Response } from "express";
-import { LoginSchema, UserSchema } from "@repo/zodSchema";
+import { ChangePassword, LoginSchema, UserSchema } from "@repo/zodSchema";
 import bcrypt from "bcrypt";
 import { prisma } from "@repo/db";
 import {
@@ -146,19 +146,18 @@ const signin = async (req: Request, res: Response) => {
       .status(200)
       .cookie("accessToken", accessToken, {
         httpOnly: true,
-        secure: isProduction, 
+        secure: isProduction,
         sameSite: isProduction ? "none" : "lax",
-        maxAge: 15 * 60 * 1000,
+        maxAge: 45 * 60 * 1000,
       })
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: isProduction, 
+        secure: isProduction,
         sameSite: isProduction ? "none" : "lax",
-        maxAge: 15 * 60 * 1000,
+        maxAge: 24 * 60 * 60 * 1000,
       })
       .json({
         message: "User loggedin successfully",
-        accessToken,
       });
   } catch (error) {
     console.error(error);
@@ -189,15 +188,15 @@ const signout = async (req: Request, res: Response) => {
       .status(200)
       .clearCookie("accessToken", {
         httpOnly: true,
-        secure: isProduction, 
+        secure: isProduction,
         sameSite: isProduction ? "none" : "lax",
         maxAge: 15 * 60 * 1000,
       })
       .clearCookie("refreshToken", {
         httpOnly: true,
-        secure: isProduction, 
+        secure: isProduction,
         sameSite: isProduction ? "none" : "lax",
-        maxAge: 15 * 60 * 1000,
+        maxAge: 24 * 60 * 60 * 1000,
       })
       .json({ message: "User logged out successfully" });
   } catch (error) {
@@ -219,7 +218,7 @@ const refreshAccessToken = async (req: Request, res: Response) => {
     const decoded = jwt.verify(
       incomingRefreshToken,
       process.env.REFRESH_TOKEN_SECRET!,
-    ) as { userId: string };
+    ) as JwtPayload;
 
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
@@ -236,15 +235,31 @@ const refreshAccessToken = async (req: Request, res: Response) => {
       user.lastname!,
     );
 
+    const newRefreshToken = generateRefreshToken(decoded.userId!);
+
+    await prisma.user.update({
+      where: {
+        id: decoded.userId,
+      },
+      data: {
+        refreshToken: newRefreshToken,
+      },
+    });
+
     return res
       .status(200)
       .cookie("accessToken", newAccessToken, {
         httpOnly: true,
-        secure: isProduction, 
+        secure: isProduction,
         sameSite: isProduction ? "none" : "lax",
-        maxAge: 15 * 60 * 1000,
+        maxAge: 45 * 60 * 1000,
       })
-      .json({ accessToken: newAccessToken });
+      .cookie("refreshToken", newRefreshToken, {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax",
+        maxAge: 24 * 60 * 60 * 1000,
+      }).json({ message: "Token refreshed" });
   } catch (error) {
     return res.status(401).json({ error: "Invalid or expired refresh token" });
   }
@@ -415,6 +430,63 @@ const resetPassword = async (req: Request, res: Response) => {
   }
 };
 
+const changePassword = async (req: Request, res: Response) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      return res.status(402).json({
+        error: "Not Authorised",
+      });
+    }
+
+    const parsedData = ChangePassword.safeParse(req.body);
+
+    if (!parsedData.success) {
+      return res.status(403).json({
+        error: "Invalid inputs",
+      });
+    }
+
+    const { newPassword, oldPassword} = parsedData.data
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    const passwordMatch = bcrypt.compare(oldPassword, user?.password!);
+
+    if (!passwordMatch) {
+      res.status(403).json({
+        error:"Incorrect Password"
+      })
+    }
+
+    const newHashedPassword = await bcrypt.hash(newPassword, 10)
+
+    await prisma.user.update({
+      where:{
+        id:userId
+      },
+      data:{
+        password:newHashedPassword
+      }
+    })
+
+    res.status(201).json({
+      message:"Password Changed succesfully"
+    })
+
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({
+      error:"Server Error"
+    })
+  }
+};
+
 const checkUsername = async (req: Request, res: Response) => {
   try {
     const username = req.params["username"];
@@ -448,51 +520,55 @@ const checkUsername = async (req: Request, res: Response) => {
   }
 };
 
-const me = async (req:Request, res:Response) => {
+const me = async (req: Request, res: Response) => {
   try {
-    const token = req.cookies.accessToken
+    const token = req.cookies.accessToken;
 
     if (!token) {
       return res.status(401).json({
-        user:null
-      })
+        user: null,
+      });
     }
 
-    const decoded = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET!) as JwtPayload
+    const decoded = jwt.verify(
+      token,
+      process.env.ACCESS_TOKEN_SECRET!,
+    ) as JwtPayload;
 
     const user = await prisma.user.findUnique({
-      where:{
-        id:decoded.userId
+      where: {
+        id: decoded.userId,
       },
-      select:{
-        id:true,
-        firstname:true,
-        lastname:true,
-        username:true,
-        email:true
-      }
-    })
+      select: {
+        id: true,
+        firstname: true,
+        lastname: true,
+        username: true,
+        email: true,
+      },
+    });
 
     res.status(200).json({
-      user
-    })
+      user,
+    });
   } catch (error) {
-      console.error(error)
-      res.status(500).json({
-        error:"Server Error"
-      })
+    console.error(error);
+    res.status(500).json({
+      error: "Server Error",
+    });
   }
-}
+};
 
 route.post("/signup", register);
 route.post("/signin", signin);
 route.post("/verify-email", verifyEmail);
-route.get("/me",me)
+route.get("/me", me);
 route.post("/refresh-token", refreshAccessToken);
 route.post("/resend-verification", resendVerificationEmail);
 route.post("/forgot-password", forgotPassword);
 route.post("/reset-password", resetPassword);
 route.get("/check/:username", checkUsername);
 route.post("/signout", authMiddleware, signout);
+route.post("/change-password", authMiddleware, changePassword);
 
 export default route;

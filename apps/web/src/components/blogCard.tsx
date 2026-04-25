@@ -1,7 +1,12 @@
+"use client"
 import { Blog } from "@/types/blog";
 import { ImageIcon } from "lucide-react";
+import { useState } from "react";
 
 export default function BlogCard({ blog }: { blog: Blog }) {
+
+  const [expanded, setExpanded] = useState(false)
+
   const initials =
     `${blog.creator?.firstname[0]}${blog.creator?.lastname?.[0] ?? ""}`.toUpperCase();
   const creatorName =
@@ -27,7 +32,7 @@ export default function BlogCard({ blog }: { blog: Blog }) {
         <h3 className="text-[15px] font-medium leading-snug line-clamp-2">
           {blog.title}
         </h3>
-        <p className="text-sm text-zinc-500 min-h-fit dark:text-zinc-400 line-clamp-3 leading-relaxed">
+        <p onClick={() =>setExpanded(!expanded)} className={`text-sm text-zinc-500 min-h-fit dark:text-zinc-400 ${expanded ? "" :"line-clamp-3"} leading-relaxed`}>
           {blog.content}
         </p>
 

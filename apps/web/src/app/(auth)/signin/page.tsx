@@ -8,9 +8,12 @@ import { LoginSchema, UserSchema } from "@repo/zodschema";
 import axios from "axios";
 import { Route } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { useState } from "react";
 
 const Signin = () => {
   const route = useRouter();
+  const [isSignin, setIsSignin] = useState(false)
   const form = useForm({
     defaultValues: {
       email: "",
@@ -21,17 +24,18 @@ const Signin = () => {
     },
     onSubmit: async ({ value }) => {
       if (value.email === "") {
-        return alert("Enter Email");
+        return toast.error("Enter Email");
       }
 
       if (value.password === "") {
-        return alert("Enter Password");
+        return toast.error("Enter Password");
       }
 
       const email = value.email;
       const password = value.password;
 
       try {
+        setIsSignin(true)
         const response = await axios.post(
           `${process.env.NEXT_PUBLIC_HTTP_URL}/auth/signin`,
           {
@@ -42,13 +46,15 @@ const Signin = () => {
             withCredentials: true,
           },
         );
-        alert("signed in succesfully");
+        setIsSignin(false)
+        toast.success("signed in succesfully");
         route.push("/dashboard");
       } catch (error) {
+        setIsSignin(false)
         if (axios.isAxiosError(error)) {
-          alert(error.response?.data.error || "Something went wrong");
+          toast.error(error.response?.data.error || "Something went wrong");
         } else {
-          alert("Something went wrong");
+          toast.error("Something went wrong");
         }
       }
     },
@@ -119,7 +125,7 @@ const Signin = () => {
           }}
         />
         <div className="flex items-center justify-center mt-8">
-          <Button size="lg" children="Signin" type="submit" />
+          <Button size="lg" children={isSignin ? "Signing.." :"Signin"} type="submit" />
         </div>
         <div className="flex items-center justify-center gap-2 mb-8">
           <span className="font-medium">Create an account</span>{" "}

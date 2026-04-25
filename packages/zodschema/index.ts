@@ -18,8 +18,8 @@ export const UserSchema = z.object({
 });
 
 export const UserFormSchema = UserSchema.extend({
-    lastname:z.string()
-})
+  lastname: z.string(),
+});
 
 export const LoginSchema = z.object({
   email: z.string().email("Email is invalid"),
@@ -31,11 +31,26 @@ export const LoginSchema = z.object({
     .min(8, "Minimum 8 character required"),
 });
 
+export const ChangePassword = z.object({
+  oldPassword: z
+    .string()
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/\d/, "Password must contain at least one number")
+    .min(8, "Minimum 8 character required"),
+  newPassword: z
+    .string()
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/\d/, "Password must contain at least one number")
+    .min(8, "Minimum 8 character required"),
+});
+
 export const BlogSchema = z.object({
   title: z.string().min(1, "Title is required"),
   content: z.string().min(1, "Content is required"),
   imageUrl: z.string().url().nullable().optional(),
-})
+});
 
 export const BlogFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -43,7 +58,7 @@ export const BlogFormSchema = z.object({
 });
 
 export const UpdateSchema = z.object({
-  title: z.string().optional(),
-  content: z.string().optional(),
-  imageUrl: z.string().optional(),
+  title: z.string().optional().nullable(),
+  content: z.string().optional().nullable(),
+  imageUrl: z.string().optional().nullable(),
 });

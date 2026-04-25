@@ -4,6 +4,7 @@ import BlogCard from "./blogCard";
 import api from "@/lib/axios";
 import { Blog } from "@/types/blog";
 import axios from "axios";
+import { toast } from "sonner";
 
 const BlogsSection = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -24,9 +25,9 @@ const BlogsSection = () => {
       setHasMore(data.nextCursor !== null);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data.error || "Something went wrong");
+        toast.error(error.response?.data.error || "Something went wrong");
       } else {
-        alert("Something went wrong ");
+        toast.error("Something went wrong ");
       }
     } finally {
       setLoading(false);
@@ -53,7 +54,7 @@ const BlogsSection = () => {
       {/* Blog cards */}
       <div className="space-y-4">
         {blogs.map((blog) => (
-          <BlogCard key={(blog.id+blog.creatorId)} blog={blog} />
+          <BlogCard key={blog.id} blog={blog} />
         ))}
       </div>
     </div>

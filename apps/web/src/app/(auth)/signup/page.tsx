@@ -8,6 +8,7 @@ import { UserFormSchema } from "@repo/zodschema";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const Singup = () => {
   const [usernameAvailable, setUsernameAvailable] = useState(true);
@@ -27,19 +28,19 @@ const Singup = () => {
     },
     onSubmit: async ({ value }) => {
       if (value.username === "") {
-        return alert("Enter Username");
+        return toast.error("Enter Username");
       }
 
       if (value.email === "") {
-        return alert("Enter Email");
+        return toast.error("Enter Email");
       }
 
       if (value.password === "") {
-        return alert("Enter Password");
+        return toast.error("Enter Password");
       }
 
       if (value.firstname === "") {
-        return alert("Enter Firstname");
+        return toast.error("Enter Firstname");
       }
 
       const username = value.username;
@@ -61,7 +62,7 @@ const Singup = () => {
 
         if (usernameAvailable === false) {
           const message = response.data.message;
-          alert(message);
+          toast.error(message);
         } else {
           setIsSignedUp(true);
           const response = await axios.post(
@@ -75,20 +76,21 @@ const Singup = () => {
             },
           );
           setIsSignedUp(false);
-          alert("Signed up successfully");
+          toast.success("Signed up successfully");
           route.push("/verify-email");
         }
       } catch (error) {
         setIsSignedUp(false);
 
         if (axios.isAxiosError(error)) {
-          alert(error.response?.data.error || "Something went wrong ");
+          toast.error(error.response?.data.error || "Something went wrong ");
         } else {
-          alert("Something went wrong ");
+          toast.error("Something went wrong ");
         }
       }
     },
   });
+  
   return (
     <div>
       <AuthLayout>

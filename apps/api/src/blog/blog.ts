@@ -2,11 +2,16 @@ import { prisma } from "@repo/db";
 import { BlogSchema, UpdateSchema } from "@repo/zodSchema";
 import express, { Request, Response } from "express";
 import { authMiddleware } from "../auth/middleware/auth.middleware.js";
-import cloudinary from "./utils/cloudinary.utils.js";
 import { upload } from "./utils/multer.utils.js";
+import {
+  deleteFromCloudinary,
+  uploadToCloudinary,
+} from "./utils/imageUpload.js";
 const route = express.Router();
 
 const createBlog = async (req: Request, res: Response) => {
+  let imageUrl: string | null = null;
+
   try {
     const userId = req.userId;
     if (!userId) {
@@ -16,24 +21,8 @@ const createBlog = async (req: Request, res: Response) => {
     const { title, content } = req.body;
     const file = req.file;
 
-    let imageUrl: string | null = null;
-
     if (file) {
-      const uploadToCloudinary = (): Promise<string> => {
-        return new Promise((resolve, reject) => {
-          const stream = cloudinary.uploader.upload_stream(
-            { folder: "blogs" },
-            (error, result) => {
-              if (error) reject(error);
-              else if (!result) reject(new Error("No result from cloudinary"));
-              else resolve(result.secure_url);
-            },
-          );
-          stream.end(file.buffer);
-        });
-      };
-
-      imageUrl = await uploadToCloudinary();
+      imageUrl = await uploadToCloudinary(file);
     }
 
     const parseData = BlogSchema.safeParse({ title, content, imageUrl });
@@ -53,6 +42,9 @@ const createBlog = async (req: Request, res: Response) => {
 
     res.status(201).json({ message: "Blog created successfully" });
   } catch (error) {
+    if (imageUrl) {
+      await deleteFromCloudinary(imageUrl);
+    }
     console.error(error);
     res.status(500).json({ error: "Server error" });
   }
@@ -213,17 +205,9 @@ const getBlog = async (req: Request, res: Response) => {
 };
 
 const updateBlog = async (req: Request, res: Response) => {
+  let image: string | null = null;
+
   try {
-    const parseData = UpdateSchema.safeParse(req.body);
-
-    if (!parseData.success) {
-      return res.status(400).json({
-        error: "Invalid inputs",
-      });
-    }
-
-    const { title, content, imageUrl } = parseData.data;
-
     const updateId = req.params["id"];
 
     if (!updateId || typeof updateId !== "string") {
@@ -232,16 +216,43 @@ const updateBlog = async (req: Request, res: Response) => {
       });
     }
 
+    const { title, content } = req.body;
+    const file = req.file;
+
+    if (file) {
+      image = await uploadToCloudinary(file);
+    }
+
+    const parseData = UpdateSchema.safeParse({ title, content, image });
+
+    console.log(parseData)
+
+    if (!parseData.success) {
+      return res.status(400).json({
+        error: "Invalid inputs",
+      });
+    }
+
+    const updateData: Record<string, string | null> = {};
+
+
+    if (parseData.data.title !== '' && parseData.data.title !== undefined) updateData.title = parseData.data.title;
+    if (parseData.data.content !== '' && parseData.data.content !== undefined) updateData.content = parseData.data.content;
+    if (parseData.data.imageUrl !== '' && parseData.data.imageUrl !== undefined) updateData.image = parseData.data.imageUrl;
+
+
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({
+        error: "No fields provided to update",
+      });
+    }
+
     const updatedBlog = await prisma.blog.update({
       where: {
         id: updateId,
         creatorId: req.userId,
       },
-      data: {
-        title,
-        content,
-        image: imageUrl ?? null,
-      },
+      data: updateData,
     });
 
     res.status(200).json({
@@ -249,6 +260,9 @@ const updateBlog = async (req: Request, res: Response) => {
       message: "Blog updated successfully",
     });
   } catch (error) {
+    if (image) {
+      await deleteFromCloudinary(image);
+    }
     console.error(error);
     res.status(500).json({
       error: "Server error",
@@ -261,7 +275,7 @@ route.post("/blog", upload.single("imageUrl"), createBlog);
 route.get("/blogs", getUsersAllBlogs);
 route.get("/blog/:id", getBlog);
 route.delete("/blog/:id", deleteBlog);
-route.put("/blog/:id", updateBlog);
+route.patch("/blog/:id",upload.single("imageUrl"), updateBlog);
 route.get("/allBlogs", getAllBlogs);
 
 export default route;

@@ -5,6 +5,7 @@ import { Mail, ArrowRight, Loader2, CheckCircle, XCircle } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { toast } from "sonner";
 
 export default function EmailVerificationCard() {
   const params = useSearchParams();
@@ -24,9 +25,9 @@ export default function EmailVerificationCard() {
       await axios.post(
         `${process.env.NEXT_PUBLIC_HTTP_URL}/auth/resend-verification`,
       );
-      alert("Verification email resent. Please check your inbox.");
+      toast.message("Verification email resent. Please check your inbox.");
     } catch {
-      alert("Failed to resend. Please try again.");
+      toast.error("Failed to resend. Please try again.");
     } finally {
       setResending(false);
     }
@@ -51,9 +52,9 @@ export default function EmailVerificationCard() {
       } catch (error) {
         setStatus("error");
         if (axios.isAxiosError(error)) {
-          alert(error.response?.data.error || "Something went wrong");
+          toast.error(error.response?.data.error || "Something went wrong");
         } else {
-          alert("Something went wrong");
+          toast.error("Something went wrong");
         }
       }
     };

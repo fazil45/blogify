@@ -1,6 +1,8 @@
+import { useAuthStore } from "@/store/authStore";
 import { ArrowRight, BookOpen, TrendingUp } from "lucide-react";
 
 export default function Hero() {
+  const {user} = useAuthStore()
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden bg-(--bg-light) dark:bg-(--bg-dark) to pt-16">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -30,7 +32,7 @@ export default function Hero() {
 
             <div className="flex flex-wrap gap-4">
               <a
-                href="/signup"
+                href={user ? "/dashboard" :"/signup"}
                 className="inline-flex items-center gap-2 bg-neutral-800 text-white font-semibold px-6 py-3 rounded-lg hover:bg-neutral-900 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
               >
                 Start Writing

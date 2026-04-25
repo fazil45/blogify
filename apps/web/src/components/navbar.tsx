@@ -10,7 +10,11 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
-  const { user, loading } = useAuthStore();
+  const { user, loading,fetchUser } = useAuthStore();
+
+  useEffect(() => {
+    fetchUser()
+  },[])
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);

@@ -3,9 +3,12 @@ import Button from "./button";
 import api from "@/lib/axios";
 import axios from "axios";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const CreateBlogSection = () => {
   const [preview, setPreview] = useState<string | null>(null);
+  const [posting, setPosting] = useState(false)
+
   const form = useForm({
     defaultValues: {
       title: "",
@@ -22,21 +25,24 @@ const CreateBlogSection = () => {
       if (value.imageUrl) {
         formdata.append("imageUrl", value.imageUrl);
       }
-
+      setPosting(true)
       try {
         await api.post("/blog", formdata, {
           headers: { "Content-Type": "multipart/form-data" },
         });
         form.reset();
+        toast.success("Blog created successfully")
+        setPosting(false)
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          alert(error.response?.data.error || "Blog not create");
+          toast.error(error.response?.data.error || "Blog not create");
         } else {
-          alert("Blog not created");
+          toast.error("Blog not created");
         }
       }
     },
   });
+  
   return (
     <div>
       <h1 className="text-lg font-medium m-4">Create Blog</h1>
@@ -135,7 +141,7 @@ const CreateBlogSection = () => {
             );
           }}
         />
-        <Button type="submit" size="lg" children="Post" />
+        <Button type="submit" size="lg" children={posting ? "Posting..." : "Post"} />
       </form>
     </div>
   );
