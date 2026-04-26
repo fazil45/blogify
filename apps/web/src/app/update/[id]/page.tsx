@@ -169,7 +169,6 @@ const Update = () => {
                         </span>
                       </div>
                       <input
-                        type="file"
                         accept="image/*"
                         hidden
                         className="w-full p-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-transparent outline-none focus:ring-2 focus:ring-neutral-400 transition "

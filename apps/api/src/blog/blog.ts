@@ -1,5 +1,5 @@
 import { prisma } from "@repo/db";
-import { BlogSchema, UpdateSchema } from "@repo/zodSchema";
+import { BlogSchema, UpdateSchema } from "@repo/zodschema";
 import express, { Request, Response } from "express";
 import { authMiddleware } from "../auth/middleware/auth.middleware.js";
 import { upload } from "./utils/multer.utils.js";

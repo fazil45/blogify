@@ -1,7 +1,7 @@
 import "dotenv/config";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import express, { Request, Response } from "express";
-import { ChangePassword, LoginSchema, UserSchema } from "@repo/zodSchema";
+import { ChangePassword, LoginSchema, UserSchema } from "@repo/zodschema";
 import bcrypt from "bcrypt";
 import { prisma } from "@repo/db";
 import {
