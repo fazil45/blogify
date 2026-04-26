@@ -1,6 +1,5 @@
 "use client";
-import Input from "@/components/input";
-import { AuthLayout } from "../authLayout";
+import Input from "@/components/input"; 
 import Button from "@/components/button";
 import Link from "next/link";
 import { useForm } from "@tanstack/react-form";
@@ -9,6 +8,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import CardModal from "@/components/cardModal";
 
 const Singup = () => {
   const [usernameAvailable, setUsernameAvailable] = useState(true);
@@ -92,15 +92,19 @@ const Singup = () => {
   });
 
   return (
-    <div>
-      <AuthLayout>
+    <div className="h-screen w-screen flex items-center justify-center mt-16">
+      <CardModal>
+        <h1 className="sm:text-4xl xl:text-4xl font-semibold  text-(--text-light) dark:text-(--text-dark) flex  items-center justify-center ">
+          Welcome
+        </h1>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             form.handleSubmit();
           }}
+
         >
-          <div className="flex gap-2">
+          <div className="flex sm:flex-col md:flex-col lg:flex-row xl:flex-row  gap-2">
             <form.Field
               name="firstname"
               children={(field) => {
@@ -227,24 +231,20 @@ const Singup = () => {
               );
             }}
           />
-          <div className="flex  items-center justify-center mt-8">
+          <div className="flex  items-center justify-center sm:mt-2 xl:mt-8">
             <Button size="lg" type="submit">
               {isSignedUp ? "Creating..." : "Create an account"}
             </Button>
           </div>
           <div className="flex items-center justify-center gap-2">
             <span
-              className="px-8 py-2 text-lg relative overflow-hidden rounded-md 
-        flex items-center justify-center
-        cursor-pointer
-        transition-all duration-200 font-semibold
-        bg-slate-400 text-(--text-light)  border-(--text-dark) dark:bg-(--bg-light) dark:text-(--text-light) border-2 dark:border-(--text-light) hover:scale-105"
+              className="xl:px-8 xl:py-2 sm:px-4 sm:py-1 text-sm xl:text-lg relative overflow-hidden rounded-md flex items-center justify-center cursor-pointer transition-all duration-200 font-semibold bg-slate-400 text-(--text-light)  border-(--text-dark) dark:bg-(--bg-light) dark:text-(--text-light) border-2 dark:border-(--text-light) hover:scale-105"
             >
               <Link href={"/signin"}>I already have an account</Link>
             </span>
           </div>
         </form>
-      </AuthLayout>
+      </CardModal>
     </div>
   );
 };

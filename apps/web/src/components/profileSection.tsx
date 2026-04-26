@@ -90,7 +90,7 @@ export default function ProfileSection() {
                   setShowBlog();
                   route.push(`/update/${user.id}`);
                 }}
-                className="flex-1 cursor-pointer border border-neutral-300 dark:border-neutral-700 py-2 rounded-lg text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition"
+                className="flex-1 cursor-pointer border border-neutral-300 dark:border-neutral-700 py-0.5 lg:py-2 xl:py-2 rounded-lg text-xs  lg:text-sm xl:text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition"
               >
                 Change Password
               </button>

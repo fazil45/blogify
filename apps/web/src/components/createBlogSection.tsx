@@ -45,7 +45,7 @@ const CreateBlogSection = () => {
   
   return (
     <div>
-      <h1 className="text-lg font-medium m-4">Create Blog</h1>
+      <h1 className=" text-xl lg:text-lg xl:text-lg font-medium m-4">Create Blog</h1>
       <form
         className="w-full flex flex-col gap-2"
         onSubmit={(e) => {
@@ -62,7 +62,7 @@ const CreateBlogSection = () => {
                 <input
                   type="text"
                   placeholder="Title"
-                  className="w-full p-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-transparent outline-none focus:ring-2 focus:ring-neutral-400 transition "
+                  className="w-full lg:p-3 xl:p-3 sm:p-1 md:p-1 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-transparent outline-none focus:ring-2 focus:ring-neutral-400 transition "
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
@@ -84,7 +84,7 @@ const CreateBlogSection = () => {
                 <label htmlFor="text">Content</label>
                 <textarea
                   placeholder="Content"
-                  className="w-full p-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-transparent outline-none focus:ring-2 focus:ring-neutral-400 transition h-44 resize-none"
+                  className="w-full p-3 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-transparent outline-none focus:ring-2 focus:ring-neutral-400 transition lg:h-44 xl:h-44 sm:h-22 md:34 resize-none"
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
@@ -105,7 +105,8 @@ const CreateBlogSection = () => {
               <div className="w-full">
                 <label className="cursor-pointer block">
                   Upload Cover Image
-                  <div className="border border-dashed border-neutral-400 dark:border-neutral-700 rounded-lg p-4 flex items-center justify-between hover:bg-neutral-100 dark:hover:bg-neutral-800 transition">
+                  <div className="border border-dashed border-neutral-400 dark:border-neutral-700 rounded-lg lg:p-4 xl:p-4
+                  p-2 flex items-center justify-between hover:bg-neutral-100 dark:hover:bg-neutral-800 transition">
                     <span className="text-sm text-neutral-600 dark:text-neutral-400">
                       {"Upload cover image"}
                     </span>

@@ -1,6 +1,5 @@
 "use client";
 import Input from "@/components/input";
-import { AuthLayout } from "../authLayout";
 import Button from "@/components/button";
 import Link from "next/link";
 import { useForm } from "@tanstack/react-form";
@@ -10,6 +9,7 @@ import { Route } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useState } from "react";
+import CardModal from "@/components/cardModal";
 
 const Signin = () => {
   const route = useRouter();
@@ -62,7 +62,11 @@ const Signin = () => {
   });
 
   return (
-    <AuthLayout>
+    <div className="h-screen w-screen flex items-center justify-center mt-16">
+      <CardModal>
+        <h1 className="sm:text-4xl xl:text-4xl font-semibold  text-(--text-light) dark:text-(--text-dark) flex  items-center justify-center ">
+          Welcome
+        </h1>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -127,7 +131,7 @@ const Signin = () => {
         />
         <div className="flex flex-col gap-2 items-center justify-center m-6">
 
-          <button onClick={() => route.push("/forgot-password")} type="button" className="bg-neutral-100 cursor-pointer rounded-md px-8 py-2 text-(--text-light) dark:text-(--text-dark)">
+          <button onClick={() => route.push("/forgot-password")} type="button" className="bg-neutral-100 dark:bg-neutral-600 cursor-pointer rounded-md px-8 py-2 text-gray-500 dark:text-neutral-300">
             Forgot password
           </button>
 
@@ -139,17 +143,18 @@ const Signin = () => {
         </div>
         <div className="flex items-center justify-center gap-2 mb-8">
           <button
-            className="px-8 py-2 text-lg relative overflow-hidden rounded-md 
+            className="px-8 py-1 text-lg relative overflow-hidden rounded-md 
         flex items-center justify-center
         cursor-pointer
         transition-all duration-200 font-semibold
-        bg-slate-400 text-(--text-light)  border-(--text-dark) dark:bg-(--bg-light) dark:text-(--text-light) border-2 dark:border-(--text-light) hover:scale-105"
+        bg-neutral-100 border-neutral-300 text-(--text-light)  dark:bg-(--bg-light) dark:text-(--text-light) border-2 dark:border-(--text-light) hover:scale-105"
           >
             <Link href={"/signup"}>Create new account</Link>
           </button>
         </div>
       </form>
-    </AuthLayout>
+    </CardModal>
+    </div>
   );
 };
 

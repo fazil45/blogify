@@ -1,32 +1,30 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-import { Search, SquarePen as PenSquare, X, Menu, Loader2, User } from "lucide-react";
+import { useState,  useEffect } from "react";
+import {
+  SquarePen as PenSquare,
+  X,
+  Menu,
+  Loader2,
+  User,
+} from "lucide-react";
 
 import ThemeToggle from "./themeToggle";
 import { useAuthStore } from "@/store/authStore";
 
 export default function Navbar() {
-  const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const searchRef = useRef<HTMLInputElement>(null);
-  const { user, loading,fetchUser } = useAuthStore();
+  const { user, loading, fetchUser } = useAuthStore();
 
   useEffect(() => {
-    fetchUser()
-  },[])
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    if (searchOpen && searchRef.current) {
-      searchRef.current.focus();
-    }
-  }, [searchOpen]);
 
   return (
     <header
@@ -37,15 +35,15 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between sm:h-12 xl:h-16">
           <a href="/" className="flex items-center gap-2 shrink-0">
-            <PenSquare className="w-7 h-7 text-(--text-light) dark:text-(--text-dark)" />
-            <span className="text-xl font-bold text-(--text-light) dark:text-(--text-dark) tracking-tight">
+            <PenSquare className="sm:w-5 sm:h-5  xl:w-7 xl:h-7 text-(--text-light) dark:text-(--text-dark)" />
+            <span className="sm:text-lg xl:text-xl font-bold text-(--text-light) dark:text-(--text-dark) tracking-tight">
               Blogify
             </span>
           </a>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-8">
             <a
               href="#"
               className="text-sm font-medium text-(--text-light) dark:text-(--text-dark) hover:text-neutral-800 dark:hover:text-neutral-400 transition-colors"
@@ -73,37 +71,6 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <div className="relative flex items-center">
-              <div
-                className={`flex items-center overflow-hidden transition-all duration-300 ease-in-out ${
-                  searchOpen ? "w-52 sm:w-64" : "w-0"
-                }`}
-              >
-                <div className="flex items-center w-full border border-gray-200 rounded-md bg-gray-50 px-3 py-1.5 gap-2">
-                  <input
-                    ref={searchRef}
-                    type="text"
-                    placeholder="Search blogs..."
-                    className="bg-transparent text-sm text-neutral-800 placeholder-gray-500 outline-none w-full"
-                  />
-                  <button className="shrink-0 bg-neutral-800 text-white rounded-md p-1 hover:text-neutral-800 dark:hover:text-neutral-400 transition-colors">
-                    <Search className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-
-              <button
-                onClick={() => setSearchOpen(!searchOpen)}
-                className="ml-1 p-2 rounded-full text-(--text-light) dark:text-(--text-dark) hover:text-neutral-800 dark:hover:text-neutral-400 hover:bg-gray-100 transition-all"
-                aria-label="Toggle search"
-              >
-                {searchOpen ? (
-                  <X className="w-5 h-5" />
-                ) : (
-                  <Search className="w-5 h-5" />
-                )}
-              </button>
-            </div>
             <div className="flex items-center justify-center">
               <ThemeToggle />
             </div>
@@ -113,9 +80,15 @@ export default function Navbar() {
                 <Loader2 className="animate-spin" />
               </div>
             ) : user ? (
-              <div>{ <button><User/></button>}</div>
+              <div>
+                {
+                  <button>
+                    <User />
+                  </button>
+                }
+              </div>
             ) : (
-              <div className="hidden md:flex items-center gap-2">
+              <div className="hidden lg:flex items-center gap-2">
                 <a
                   href="/signin"
                   className="text-sm font-medium text-neutral-600 bg-neutral-100 hover:text-neutral-800 dark:hover:text-neutral-400 px-4 py-1.5 rounded-md transition-colors shadow-sm"
@@ -133,7 +106,7 @@ export default function Navbar() {
 
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden p-2 rounded-md text-(--text-light) dark:text-(--text-dark) hover:bg-gray-100 transition-colors"
+              className="lg:hidden p-2 rounded-md text-(--text-light) dark:text-(--text-dark) hover:bg-gray-100 transition-colors"
             >
               {menuOpen ? (
                 <X className="w-5 h-5" />
@@ -146,7 +119,7 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 shadow-lg">
+        <div className="lg:hidden bg-white border-t border-gray-100 shadow-lg">
           <div className="px-4 py-4 flex flex-col gap-3">
             <a
               href="#"

@@ -41,7 +41,7 @@ const ForgotPasswordCard = () => {
     <div className="h-screen w-screen flex items-center justify-center">
       <CardModal>
         <div className="flex flex-col">
-          <div className="mt-8 mb-16 text-2xl">
+          <div className="mt-2 mb-4 lg:mt-8 xl:mt-8 lg:mb-16 xl:mb-16 text-lg lg:text-2xl xl:text-2xl font-medium">
             Enter Email to Reset Password
           </div>
           <div className="flex flex-col items-center justify-center mb-8 gap-8">

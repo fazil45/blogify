@@ -12,7 +12,7 @@ type ButtonProps = {
 const Button = ({ type = "button", children, onClick, size }: ButtonProps) => {
   const sizeStyles = {
     md: "px-4 py-1 text-lg",
-    lg: "px-24 py-2 text-lg",
+    lg: "sm:px-12 sm:py-2 xl:px-24 xl:py-2 text-sm xl:text-lg",
   };
 
   return (

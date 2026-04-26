@@ -25,17 +25,17 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => {
     return (
       <div>
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-1">
           <label
             htmlFor={htmlFor}
-            className="text-lg font-medium text-(--text-light) dark:text-(--text-dark)"
+            className="sm:text-sm xl:text-lg font-medium text-(--text-light) dark:text-(--text-dark)"
           >
             {label}
           </label>
 
           <input
             id={htmlFor}
-            className="bg-white dark:bg-neutral-600 rounded-sm outline-none shadow-2xs py-1 px-2 placeholder:text-neutral-500 dark:placeholder:text-neutral-400"
+            className="bg-white dark:bg-neutral-600 rounded-sm outline-none shadow-2xs sm:px-1 sm:py-px xl:py-1 xl:px-2 placeholder:text-neutral-500 dark:placeholder:text-neutral-400 sm:placeholder:text-sm placeholder:text-lg"
             type={type}
             onChange={onChange}
             onBlur={onBlur}

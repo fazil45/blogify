@@ -9,3 +9,11 @@
   --color-blue:oklch(68.5% 0.169 237.323);
   --color-red:oklch(58.6% 0.253 17.585);
 }
+
+@theme {
+  --breakpoint-xs: 240px;
+  --breakpoint-sm: 320px;
+  --breakpoint-md: 480px;
+  --breakpoint-lg: 650px;
+  --breakpoint-xl: 1044px;
+}
