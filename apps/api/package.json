@@ -13,6 +13,7 @@
   "type": "module",
   "license": "ISC",
   "dependencies": {
+    "@repo/zodschema": "workspace:*",
     "@repo/db": "workspace:*",
     "@types/node": "^22.15.3",
     "bcrypt": "^6.0.0",
@@ -28,7 +29,6 @@
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@repo/zodschema": "workspace:*",
     "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
@@ -39,3 +39,4 @@
     "tsx": "^4.21.0"
   }
 }
+
