@@ -1,11 +1,6 @@
 {
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@repo/db": ["../../packages/db/src"],
-      "@repo/zodschema": ["../../packages/zodschema/src"]
-    },
     "rootDir": "./src",
     "outDir": "./dist",
     "noEmit": false,

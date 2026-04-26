@@ -4,10 +4,7 @@
   "description": "",
   "main": "./dist/index.js",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
+    ".":  "./dist/index.js"
   },
   "scripts": {
     "db:generate": "prisma generate && pnpm run build",
