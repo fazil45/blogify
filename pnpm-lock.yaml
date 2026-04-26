@@ -23,6 +23,9 @@ importers:
       '@repo/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@repo/zodschema':
+        specifier: workspace:*
+        version: link:../../packages/zodschema
       '@types/node':
         specifier: ^22.15.3
         version: 22.15.3
@@ -60,9 +63,6 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
-      '@repo/zodschema':
-        specifier: workspace:*
-        version: link:../../packages/zodschema
       '@types/bcrypt':
         specifier: ^6.0.0
         version: 6.0.0
